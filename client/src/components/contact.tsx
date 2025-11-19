@@ -183,6 +183,7 @@ export function Contact() {
 
           {/* Contact Form */}
           <motion.div
+            key={isSubmitted ? 'success' : 'form'}
             initial={{ opacity: 0, x: 50 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.4 }}
