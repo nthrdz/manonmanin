@@ -116,19 +116,39 @@
 
 ---
 
+## Color Palette - Autumn Warmth
+
+**Primary Colors** (Light Mode):
+- Background: `hsl(30 25% 96%)` - Warm cream white
+- Primary: `hsl(18 65% 56%)` - Terracotta/burnt orange
+- Secondary: `hsl(30 25% 80%)` - Warm beige
+- Accent: `hsl(35 55% 72%)` - Soft apricot
+- Card: `hsl(35 30% 92%)` - Light warm gray
+
+**Supporting Colors**:
+- Muted: `hsl(30 20% 86%)` - Subtle warm gray
+- Border: `hsl(30 15% 85%)` - Gentle boundary color
+
+**Dark Mode Variants**:
+- Background: `hsl(25 15% 10%)` - Deep warm brown
+- Primary: `hsl(18 65% 60%)` - Brightened terracotta
+- Card: `hsl(25 18% 14%)` - Rich dark brown
+
+**Animation Colors**:
+- Particles: Terracotta (#D4764B), Copper (#CC7722), Gold (#B8860B)
+- Gradient overlays use warm autumn tones for depth
+
 ## Images
 
-**Hero Section**: Large, warm-toned photograph of serene mother holding newborn in soft natural light. Composition allows text overlay on left or center.
+**Hero Section**: Warm-toned photograph of serene mother holding newborn in soft golden light (generated).
 
-**About Section**: Professional portrait of practitioner in warm, inviting setting.
+**About Section**: Professional portrait of doula in warm, inviting setting (generated).
 
-**Services**: Lifestyle imagery showing mother-baby bonding, peaceful home environments, supportive interactions.
+**Services**: Lifestyle imagery showing mother-baby bonding, hands detail shots (generated).
 
-**Testimonials**: Circular client headshots with soft focus backgrounds.
+**Resources**: Mix of peaceful home scenes and intimate moments (generated).
 
-**Blog/Resources**: Featured images for articles—mix of illustrations and photography in autumn palette.
-
-**Decorative Elements**: Organic shapes, flowing lines, subtle botanical illustrations as SVG overlays.
+**Decorative Elements**: Particle effects in golden/amber tones, gradient overlays with autumn warmth.
 
 ---
 

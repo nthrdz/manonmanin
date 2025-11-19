@@ -1,37 +1,43 @@
-import { type User, type InsertUser } from "@shared/schema";
+import { type ContactForm } from "@shared/schema";
 import { randomUUID } from "crypto";
 
-// modify the interface with any CRUD methods
-// you might need
+interface StoredContact extends ContactForm {
+  id: string;
+  createdAt: Date;
+}
 
 export interface IStorage {
-  getUser(id: string): Promise<User | undefined>;
-  getUserByUsername(username: string): Promise<User | undefined>;
-  createUser(user: InsertUser): Promise<User>;
+  saveContact(contact: ContactForm): Promise<StoredContact>;
+  getAllContacts(): Promise<StoredContact[]>;
+  getContact(id: string): Promise<StoredContact | undefined>;
 }
 
 export class MemStorage implements IStorage {
-  private users: Map<string, User>;
+  private contacts: Map<string, StoredContact>;
 
   constructor() {
-    this.users = new Map();
+    this.contacts = new Map();
   }
 
-  async getUser(id: string): Promise<User | undefined> {
-    return this.users.get(id);
+  async saveContact(contact: ContactForm): Promise<StoredContact> {
+    const id = randomUUID();
+    const storedContact: StoredContact = {
+      ...contact,
+      id,
+      createdAt: new Date(),
+    };
+    this.contacts.set(id, storedContact);
+    return storedContact;
   }
 
-  async getUserByUsername(username: string): Promise<User | undefined> {
-    return Array.from(this.users.values()).find(
-      (user) => user.username === username,
+  async getAllContacts(): Promise<StoredContact[]> {
+    return Array.from(this.contacts.values()).sort(
+      (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
     );
   }
 
-  async createUser(insertUser: InsertUser): Promise<User> {
-    const id = randomUUID();
-    const user: User = { ...insertUser, id };
-    this.users.set(id, user);
-    return user;
+  async getContact(id: string): Promise<StoredContact | undefined> {
+    return this.contacts.get(id);
   }
 }
 
