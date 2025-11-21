@@ -5,57 +5,68 @@ import { Badge } from '@/components/ui/badge';
 import { FileText, Video, Headphones, BookOpen } from 'lucide-react';
 import motherBabyImage from '@assets/generated_images/Mother_baby_hands_detail_da4960c1.png';
 import motherHomeImage from '@assets/generated_images/Mother_nursing_at_home_8cbcaf9b.png';
+import image2 from '@assets/generated_images/2.jpg';
+import image3 from '@assets/generated_images/3.jpg';
+import image4 from '@assets/generated_images/4.jpg';
+import image5 from '@assets/generated_images/5.jpg';
+import image6 from '@assets/generated_images/6.jpg';
+import image7 from '@assets/generated_images/7.jpg';
 
 const resources = [
   {
     id: '1',
-    title: 'Guide du Post-Partum',
+    title: 'Walk\'n cause',
     category: 'Guide',
     type: 'PDF',
     description: 'Un guide complet pour naviguer les premières semaines après la naissance',
-    image: motherBabyImage,
+    image: image2,
     icon: FileText,
     color: 'bg-chart-1/10 text-chart-1',
+    link: 'https://manonmanin-mama-mia.systeme.io/atelier-walk-n',
   },
   {
     id: '2',
-    title: 'Techniques de Relaxation',
+    title: 'Mama blessing',
     category: 'Audio',
     type: 'MP3',
     description: 'Exercices audio guidés pour retrouver la sérénité',
-    image: motherHomeImage,
+    image: image3,
     icon: Headphones,
     color: 'bg-chart-2/10 text-chart-2',
+    link: 'https://manonmanin-mama-mia.systeme.io/mama-blessing',
   },
   {
     id: '3',
-    title: 'Allaitement Serein',
+    title: 'Mois d\'or',
     category: 'Vidéo',
     type: 'VIDEO',
     description: 'Conseils et démonstrations pour un allaitement réussi',
-    image: motherBabyImage,
+    image: image4,
     icon: Video,
     color: 'bg-chart-3/10 text-chart-3',
+    link: 'https://manonmanin-mama-mia.systeme.io/vivre-un-mois-dor',
   },
   {
     id: '4',
-    title: 'Routines Apaisantes',
+    title: 'Bilan de naissance',
     category: 'Article',
     type: 'BLOG',
-    description: 'Comment créer des routines qui favorisent le bien-être',
-    image: motherHomeImage,
+    description: 'Un accompagnement personnalisé pour rédiger votre projet de naissance ou de post-partum',
+    image: image5,
     icon: BookOpen,
     color: 'bg-chart-4/10 text-chart-4',
+    link: 'https://manonmanin-mama-mia.systeme.io/bilan',
   },
   {
     id: '5',
-    title: 'Soins du Bébé',
+    title: 'Le panier post partum',
     category: 'Guide',
     type: 'PDF',
-    description: 'Les gestes essentiels pour prendre soin de votre bébé',
-    image: motherBabyImage,
+    description: 'Des attentions précieuses pour célébrer la maman qu\'elle devient',
+    image: image6,
     icon: FileText,
     color: 'bg-chart-1/10 text-chart-1',
+    link: 'https://manonmanin-mama-mia.systeme.io/panier-post-partum',
   },
   {
     id: '6',
@@ -63,7 +74,7 @@ const resources = [
     category: 'Vidéo',
     type: 'VIDEO',
     description: 'Exercices doux pour retrouver votre corps en douceur',
-    image: motherHomeImage,
+    image: image7,
     icon: Video,
     color: 'bg-chart-3/10 text-chart-3',
   },
@@ -85,7 +96,7 @@ export function Resources() {
           transition={{ duration: 0.6 }}
         >
           <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-semibold text-foreground mb-4">
-            Ressources Gratuites
+            Ressources
           </h2>
           <p className="text-lg text-muted-foreground leading-relaxed">
             Des outils pratiques et inspirants pour vous accompagner au quotidien
@@ -95,6 +106,11 @@ export function Resources() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
           {resources.map((resource, index) => {
             const Icon = resource.icon;
+            const handleClick = () => {
+              if (resource.link) {
+                window.open(resource.link, '_blank', 'noopener,noreferrer');
+              }
+            };
             return (
               <motion.div
                 key={resource.id}
@@ -104,7 +120,10 @@ export function Resources() {
                 whileHover={{ y: -8 }}
                 data-testid={`card-resource-${resource.id}`}
               >
-                <Card className="h-full overflow-hidden hover-elevate active-elevate-2 transition-all duration-300 group cursor-pointer">
+                <Card 
+                  className="h-full overflow-hidden hover-elevate active-elevate-2 transition-all duration-300 group cursor-pointer"
+                  onClick={handleClick}
+                >
                   <div className="relative h-48 overflow-hidden">
                     <img
                       src={resource.image}

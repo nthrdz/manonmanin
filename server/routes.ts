@@ -2,7 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { emailService } from "./email";
-import { contactSchema } from "@shared/schema";
+import { contactSchema, newsletterSchema } from "@shared/schema";
 import { z } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -59,6 +59,42 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({
         success: false,
         message: "Une erreur est survenue",
+      });
+    }
+  });
+
+  // Newsletter subscription
+  app.post("/api/newsletter", async (req, res) => {
+    try {
+      // Validate request body
+      const validatedData = newsletterSchema.parse(req.body);
+
+      // Save newsletter subscription to storage
+      const savedNewsletter = await storage.saveNewsletter(validatedData);
+
+      // Send confirmation email (fire and forget)
+      emailService.sendNewsletterConfirmationEmail(validatedData).catch(err => 
+        console.error('Failed to send newsletter confirmation:', err)
+      );
+
+      res.json({
+        success: true,
+        message: "Merci de vous être inscrit à notre newsletter !",
+        id: savedNewsletter.id,
+      });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({
+          success: false,
+          message: "Données invalides",
+          errors: error.errors,
+        });
+      }
+
+      console.error("Error processing newsletter subscription:", error);
+      res.status(500).json({
+        success: false,
+        message: "Une erreur est survenue. Veuillez réessayer.",
       });
     }
   });

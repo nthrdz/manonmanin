@@ -95,19 +95,19 @@ export function Contact() {
     {
       icon: Mail,
       label: 'Email',
-      value: 'contact@accompagnement-postpartum.fr',
-      href: 'mailto:contact@accompagnement-postpartum.fr',
+      value: 'contact@manon-manin.fr',
+      href: 'mailto:contact@manon-manin.fr',
     },
     {
       icon: Phone,
       label: 'Téléphone',
-      value: '+33 6 12 34 56 78',
-      href: 'tel:+33612345678',
+      value: '+33 6 29 86 54 26',
+      href: 'tel:+33629865426',
     },
     {
       icon: MapPin,
       label: 'Localisation',
-      value: 'Paris et Île-de-France',
+      value: 'Nantes',
       href: null,
     },
   ];
@@ -174,8 +174,8 @@ export function Contact() {
                 Horaires de disponibilité
               </h4>
               <div className="space-y-2 text-sm text-muted-foreground">
-                <p>Lundi - Vendredi: 9h00 - 18h00</p>
-                <p>Samedi: 10h00 - 16h00</p>
+                <p>Lundi, Mardi, Jeudi, Vendredi: 9h00 - 16h00</p>
+                <p>Samedi: 9h00 - 12h00</p>
                 <p>Dimanche: Sur rendez-vous uniquement</p>
               </div>
             </div>
@@ -266,7 +266,7 @@ export function Contact() {
                         <FormControl>
                           <Input
                             type="tel"
-                            placeholder="+33 6 12 34 56 78"
+                            placeholder="+33 6 29 86 54 26"
                             {...field}
                             data-testid="input-telephone"
                           />

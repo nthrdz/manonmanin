@@ -1,5 +1,13 @@
+import dotenv from 'dotenv';
+import { resolve } from 'path';
 import nodemailer from 'nodemailer';
-import type { ContactForm } from '@shared/schema';
+import type { ContactForm, NewsletterForm } from '@shared/schema';
+
+// Charger les variables d'environnement si pas déjà chargées
+if (!process.env.SMTP_HOST) {
+  dotenv.config({ path: resolve(process.cwd(), '.env.local') });
+  dotenv.config({ path: resolve(process.cwd(), '.env') });
+}
 
 export class EmailService {
   private transporter: nodemailer.Transporter | null = null;
@@ -70,8 +78,8 @@ export class EmailService {
 
     try {
       const info = await this.transporter.sendMail({
-        from: `"Site Post-Partum" <${process.env.SMTP_FROM || 'noreply@accompagnement-postpartum.fr'}>`,
-        to: process.env.CONTACT_EMAIL || 'contact@accompagnement-postpartum.fr',
+        from: `"Site Post-Partum" <${process.env.SMTP_FROM || 'noreply@manon-manin.fr'}>`,
+        to: process.env.CONTACT_EMAIL || 'contact@manon-manin.fr',
         replyTo: contact.email,
         subject: `Nouveau message de ${contact.nom}`,
         html: `
@@ -162,7 +170,7 @@ ${contact.message}
 
     try {
       await this.transporter.sendMail({
-        from: `"Accompagnement Post-Partum" <${process.env.SMTP_FROM || 'noreply@accompagnement-postpartum.fr'}>`,
+        from: `"Accompagnement Post-Partum" <${process.env.SMTP_FROM || 'noreply@manon-manin.fr'}>`,
         to: contact.email,
         subject: 'Confirmation de votre message',
         html: `
@@ -181,7 +189,7 @@ ${contact.message}
               </p>
               
               <p style="color: #333; line-height: 1.6; margin-bottom: 24px;">
-                En attendant, n'hésitez pas à consulter mes ressources gratuites sur le site.
+                En attendant, n'hésitez pas à consulter mes ressources sur le site.
               </p>
               
               <div style="text-align: center; margin: 32px 0;">
@@ -194,7 +202,7 @@ ${contact.message}
               
               <div style="text-align: center; padding-top: 20px; border-top: 1px solid #e5e5e5; font-size: 14px; color: #666;">
                 <p>Accompagnement Post-Partum</p>
-                <p>Paris et Île-de-France</p>
+                <p>Nantes</p>
               </div>
             </div>
           </div>
@@ -204,18 +212,76 @@ Bonjour ${contact.nom},
 
 J'ai bien reçu votre message et je vous en remercie. Je m'engage à vous répondre dans les plus brefs délais, généralement sous 24 à 48 heures.
 
-En attendant, n'hésitez pas à consulter mes ressources gratuites sur le site.
+En attendant, n'hésitez pas à consulter mes ressources sur le site.
 
 Prenez soin de vous,
 
 Accompagnement Post-Partum
-Paris et Île-de-France
+Nantes
         `,
       });
 
       console.log('✅ Confirmation email sent to:', contact.email);
     } catch (error) {
       console.error('❌ Failed to send confirmation email:', error);
+    }
+  }
+
+  async sendNewsletterConfirmationEmail(newsletter: NewsletterForm): Promise<void> {
+    if (!this.transporter) {
+      return;
+    }
+
+    try {
+      await this.transporter.sendMail({
+        from: `"Accompagnement Post-Partum" <${process.env.SMTP_FROM || 'noreply@manon-manin.fr'}>`,
+        to: newsletter.email,
+        subject: 'Bienvenue dans notre newsletter !',
+        html: `
+          <div style="font-family: 'Inter', Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f5f0;">
+            <div style="background-color: white; border-radius: 12px; padding: 32px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+              <h1 style="color: #D4764B; font-family: 'Cormorant Garamond', Georgia, serif; font-size: 28px; margin-bottom: 16px;">
+                Bienvenue ! ✨
+              </h1>
+              
+              <p style="color: #333; line-height: 1.6; margin-bottom: 16px;">
+                Merci de vous être inscrit à notre newsletter !
+              </p>
+              
+              <p style="color: #333; line-height: 1.6; margin-bottom: 16px;">
+                Vous recevrez désormais nos conseils, astuces et actualités directement dans votre boîte mail. Nous partageons régulièrement des informations sur l'accompagnement post-partum, la parentalité bienveillante et le bien-être des mamans.
+              </p>
+              
+              <div style="text-align: center; margin: 32px 0;">
+                <div style="display: inline-block; background-color: #f9f5f0; padding: 20px; border-radius: 8px; border: 2px solid #D4764B;">
+                  <p style="color: #8B4513; font-weight: 600; margin: 0;">
+                    💛 Prenez soin de vous 💛
+                  </p>
+                </div>
+              </div>
+              
+              <div style="text-align: center; padding-top: 20px; border-top: 1px solid #e5e5e5; font-size: 14px; color: #666;">
+                <p>Accompagnement Post-Partum</p>
+                <p>Nantes</p>
+              </div>
+            </div>
+          </div>
+        `,
+        text: `
+Merci de vous être inscrit à notre newsletter !
+
+Vous recevrez désormais nos conseils, astuces et actualités directement dans votre boîte mail. Nous partageons régulièrement des informations sur l'accompagnement post-partum, la parentalité bienveillante et le bien-être des mamans.
+
+Prenez soin de vous,
+
+Accompagnement Post-Partum
+Nantes
+        `,
+      });
+
+      console.log('✅ Newsletter confirmation email sent to:', newsletter.email);
+    } catch (error) {
+      console.error('❌ Failed to send newsletter confirmation email:', error);
     }
   }
 }

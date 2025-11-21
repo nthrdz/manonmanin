@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { Award, Heart, Users, Sparkles } from 'lucide-react';
-import aboutImage from '@assets/generated_images/Professional_doula_portrait_f0ef9c37.png';
+import aboutImage from '@assets/generated_images/1.jpg';
 
 const milestones = [
   {
@@ -84,21 +84,10 @@ export function About() {
               </h2>
               <div className="space-y-4 text-muted-foreground leading-relaxed mb-8">
                 <p>
-                  Devenue maman en 2017, j\'ai découvert à quel point la période post-partum
-                  peut être à la fois merveilleuse et bouleversante. C\'est cette expérience
-                  personnelle qui m\'a guidée vers ma vocation : accompagner les mamans
-                  avec bienveillance et professionnalisme.
+                  Je suis maman d'un merveilleux petit Gabriel, né en mars 2023. Psychomotricienne de formation depuis 2014, j'ai travaillé dans divers contextes : auprès d'adultes cérébrolésés, en maison de retraite, et en pédopsychiatrie.
                 </p>
                 <p>
-                  Formée en tant que doula et enrichie par des formations continues en
-                  accompagnement périnatal, je mets mon expérience au service des familles.
-                  Mon approche allie écoute empathique, conseils pratiques et soutien
-                  émotionnel pour que chaque maman se sente épaulée.
-                </p>
-                <p>
-                  Je crois profondément qu\'aucune maman ne devrait traverser cette période
-                  seule. Mon rôle est d\'être à vos côtés, de vous accompagner avec douceur
-                  et de vous aider à retrouver votre équilibre et votre confiance.
+                  Après avoir frôlé deux épisodes de burn-out et vécu un grave accident qui a marqué un tournant dans ma vie, j'ai décidé de me réorienter. Ce choix a ouvert la voie à des formations en coaching, naturopathie, gynécologie holistique et en tant que doula.
                 </p>
               </div>
             </motion.div>

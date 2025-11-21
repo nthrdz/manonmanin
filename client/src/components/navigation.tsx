@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { Heart, Menu, X } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
+import logoImage from '@assets/generated_images/logo manon off.png';
 
 export function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
@@ -66,10 +67,11 @@ export function Navigation() {
               whileTap={{ scale: 0.95 }}
               data-testid="link-logo"
             >
-              <Heart className="w-7 h-7 text-primary fill-primary" />
-              <span className="font-serif text-xl lg:text-2xl font-semibold text-foreground">
-                Post-Partum
-              </span>
+              <img 
+                src={logoImage} 
+                alt="Logo Manon" 
+                className="h-16 lg:h-20 w-auto object-contain"
+              />
             </motion.div>
 
             {/* Desktop Navigation */}

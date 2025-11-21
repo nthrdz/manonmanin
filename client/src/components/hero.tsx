@@ -4,8 +4,8 @@ import Particles from '@tsparticles/react';
 import type { Engine } from '@tsparticles/engine';
 import { loadSlim } from '@tsparticles/slim';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Sparkles } from 'lucide-react';
-import heroImage from '@assets/generated_images/Hero_image_mother_newborn_e6dfd188.png';
+import { ArrowRight } from 'lucide-react';
+import heroImage from '@assets/generated_images/9.jpg';
 
 export function Hero() {
   const particlesInit = useCallback(async (engine: Engine) => {
@@ -90,18 +90,6 @@ export function Hero() {
       {/* Content */}
       <div className="relative z-20 container mx-auto px-4 sm:px-6 lg:px-8 py-32 lg:py-40">
         <div className="max-w-4xl mx-auto text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="mb-6"
-          >
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 backdrop-blur-sm border border-primary/20">
-              <Sparkles className="w-4 h-4 text-primary" />
-              <span className="text-sm font-medium text-white">Accompagnement bienveillant</span>
-            </div>
-          </motion.div>
-
           <motion.h1
             className="font-serif text-4xl sm:text-5xl lg:text-7xl font-semibold text-white mb-6 leading-tight"
             initial={{ opacity: 0, y: 30 }}

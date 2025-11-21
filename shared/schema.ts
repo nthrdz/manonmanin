@@ -11,6 +11,13 @@ export const contactSchema = z.object({
 
 export type ContactForm = z.infer<typeof contactSchema>;
 
+// Newsletter Schema
+export const newsletterSchema = z.object({
+  email: z.string().email("Email invalide"),
+});
+
+export type NewsletterForm = z.infer<typeof newsletterSchema>;
+
 // Testimonial Type
 export interface Testimonial {
   id: string;

@@ -1,3 +1,9 @@
+import dotenv from 'dotenv';
+import { resolve } from 'path';
+
+// Charger .env.local en priorité, puis .env
+dotenv.config({ path: resolve(process.cwd(), '.env.local') });
+dotenv.config({ path: resolve(process.cwd(), '.env') });
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
@@ -71,11 +77,15 @@ app.use((req, res, next) => {
   // this serves both the API and the client.
   // It is the only port that is not firewalled.
   const port = parseInt(process.env.PORT || '5000', 10);
-  server.listen({
-    port,
-    host: "0.0.0.0",
-    reusePort: true,
-  }, () => {
-    log(`serving on port ${port}`);
+  const host = process.env.NODE_ENV === 'development' ? 'localhost' : '0.0.0.0';
+  const listenOptions: any = { port, host };
+  
+  // reusePort is not supported on macOS, only use it in production if needed
+  if (process.env.NODE_ENV !== 'development') {
+    listenOptions.reusePort = true;
+  }
+  
+  server.listen(listenOptions, () => {
+    log(`serving on ${host}:${port}`);
   });
 })();

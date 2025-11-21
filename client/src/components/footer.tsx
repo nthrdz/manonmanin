@@ -1,5 +1,7 @@
 import { motion } from 'framer-motion';
-import { Heart, Instagram, Facebook, Mail } from 'lucide-react';
+import { Instagram, MapPin, Mail } from 'lucide-react';
+import { FaTelegram } from 'react-icons/fa';
+import logoImage from '@assets/generated_images/logo manon off.png';
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
@@ -19,9 +21,10 @@ export function Footer() {
   };
 
   const socialLinks = [
-    { icon: Instagram, href: '#', label: 'Instagram' },
-    { icon: Facebook, href: '#', label: 'Facebook' },
-    { icon: Mail, href: 'mailto:contact@accompagnement-postpartum.fr', label: 'Email' },
+    { icon: Instagram, href: 'https://www.instagram.com/manon.mama_mia/', label: 'Instagram' },
+    { icon: FaTelegram, href: 'https://t.me/+N_FV4VqTdJl4NTJk', label: 'Telegram' },
+    { icon: MapPin, href: 'https://www.google.com/maps/place/ManonMaMaMia/@47.2359697,-1.5899613,17z/data=!3m1!4b1!4m6!3m5!1s0x4805ed6d181a0e5f:0x4f9348b6cf6e78d1!8m2!3d47.2359697!4d-1.5899613!16s%2Fg%2F11k9n6gzl5?entry=ttu&g_ep=EgoyMDI1MTExNy4wIKXMDSoASAFQAw%3D%3D', label: 'Localisation' },
+    { icon: Mail, href: 'mailto:contact@manon-manin.fr', label: 'Email' },
   ];
 
   const scrollToSection = (href: string) => {
@@ -40,10 +43,11 @@ export function Footer() {
           {/* Brand */}
           <div>
             <div className="flex items-center gap-2 mb-4">
-              <Heart className="w-7 h-7 text-primary fill-primary" />
-              <span className="font-serif text-xl font-semibold text-foreground">
-                Post-Partum
-              </span>
+              <img 
+                src={logoImage} 
+                alt="Logo Manon" 
+                className="h-14 lg:h-16 w-auto object-contain"
+              />
             </div>
             <p className="text-sm text-muted-foreground leading-relaxed mb-6">
               Accompagnement professionnel et bienveillant pour les mamans.
@@ -108,19 +112,19 @@ export function Footer() {
             <ul className="space-y-3 text-sm text-muted-foreground">
               <li>
                 <a
-                  href="mailto:contact@accompagnement-postpartum.fr"
+                  href="mailto:contact@manon-manin.fr"
                   className="hover:text-foreground transition-colors"
                 >
-                  contact@accompagnement-postpartum.fr
+                  contact@manon-manin.fr
                 </a>
               </li>
               <li>
-                <a href="tel:+33612345678" className="hover:text-foreground transition-colors">
-                  +33 6 12 34 56 78
+                <a href="tel:+33629865426" className="hover:text-foreground transition-colors">
+                  +33 6 29 86 54 26
                 </a>
               </li>
               <li className="pt-2">
-                <p className="text-xs">Paris et Île-de-France</p>
+                <p className="text-xs">Nantes</p>
               </li>
             </ul>
           </div>
@@ -133,9 +137,9 @@ export function Footer() {
               © {currentYear} Accompagnement Post-Partum. Tous droits réservés.
             </p>
             <div className="flex gap-6 text-sm text-muted-foreground">
-              <button className="hover:text-foreground transition-colors">
+              <a href="/mentions-legales" className="hover:text-foreground transition-colors">
                 Mentions Légales
-              </button>
+              </a>
               <button className="hover:text-foreground transition-colors">
                 Politique de Confidentialité
               </button>
