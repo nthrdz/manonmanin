@@ -3,8 +3,6 @@ import { useInView } from 'react-intersection-observer';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { FileText, Video, Headphones, BookOpen } from 'lucide-react';
-import motherBabyImage from '@assets/generated_images/Mother_baby_hands_detail_da4960c1.png';
-import motherHomeImage from '@assets/generated_images/Mother_nursing_at_home_8cbcaf9b.png';
 import image2 from '@assets/generated_images/2.jpg';
 import image3 from '@assets/generated_images/3.jpg';
 import image4 from '@assets/generated_images/4.jpg';

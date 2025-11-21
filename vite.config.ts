@@ -30,6 +30,36 @@ export default defineConfig({
   build: {
     outDir: path.resolve(import.meta.dirname, "dist/public"),
     emptyOutDir: true,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          // Framework React
+          'react-vendor': ['react', 'react-dom', 'react/jsx-runtime'],
+          // Routing
+          'router': ['wouter'],
+          // Animations
+          'animations': ['framer-motion'],
+          // Particles
+          'particles': ['@tsparticles/react', '@tsparticles/slim', '@tsparticles/engine'],
+          // UI Components - Radix UI
+          'radix-ui': [
+            '@radix-ui/react-dialog',
+            '@radix-ui/react-toast',
+            '@radix-ui/react-slot',
+            '@radix-ui/react-label',
+          ],
+          // Forms
+          'forms': ['react-hook-form', '@hookform/resolvers', 'zod'],
+          // Data fetching
+          'query': ['@tanstack/react-query'],
+          // Icons
+          'icons': ['lucide-react', 'react-icons'],
+          // Utilities
+          'utils': ['clsx', 'tailwind-merge', 'class-variance-authority'],
+        },
+      },
+    },
+    chunkSizeWarningLimit: 600,
   },
   server: {
     fs: {
