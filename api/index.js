@@ -3,7 +3,7 @@
 // api/index.ts.source
 import dotenv2 from "dotenv";
 import { resolve as resolve2 } from "path";
-import express2 from "express";
+import express from "express";
 
 // server/routes.ts
 import { createServer } from "http";
@@ -406,109 +406,21 @@ async function registerRoutes(app2) {
   return httpServer;
 }
 
-// server/vite.ts
-import express from "express";
-import fs from "fs";
-import path2 from "path";
-import { createServer as createViteServer, createLogger } from "vite";
-
-// vite.config.ts
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
-import path from "path";
-import runtimeErrorOverlay from "@replit/vite-plugin-runtime-error-modal";
-var vite_config_default = defineConfig({
-  plugins: [
-    react(),
-    runtimeErrorOverlay(),
-    ...process.env.NODE_ENV !== "production" && process.env.REPL_ID !== void 0 ? [
-      await import("@replit/vite-plugin-cartographer").then(
-        (m) => m.cartographer()
-      ),
-      await import("@replit/vite-plugin-dev-banner").then(
-        (m) => m.devBanner()
-      )
-    ] : []
-  ],
-  resolve: {
-    alias: {
-      "@": path.resolve(import.meta.dirname, "client", "src"),
-      "@shared": path.resolve(import.meta.dirname, "shared"),
-      "@assets": path.resolve(import.meta.dirname, "attached_assets")
-    }
-  },
-  root: path.resolve(import.meta.dirname, "client"),
-  build: {
-    outDir: path.resolve(import.meta.dirname, "dist/public"),
-    emptyOutDir: true,
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          // Framework React
-          "react-vendor": ["react", "react-dom", "react/jsx-runtime"],
-          // Routing
-          "router": ["wouter"],
-          // Animations
-          "animations": ["framer-motion"],
-          // Particles
-          "particles": ["@tsparticles/react", "@tsparticles/slim", "@tsparticles/engine"],
-          // UI Components - Radix UI
-          "radix-ui": [
-            "@radix-ui/react-dialog",
-            "@radix-ui/react-toast",
-            "@radix-ui/react-slot",
-            "@radix-ui/react-label"
-          ],
-          // Forms
-          "forms": ["react-hook-form", "@hookform/resolvers", "zod"],
-          // Data fetching
-          "query": ["@tanstack/react-query"],
-          // Icons
-          "icons": ["lucide-react", "react-icons"],
-          // Utilities
-          "utils": ["clsx", "tailwind-merge", "class-variance-authority"]
-        }
-      }
-    },
-    chunkSizeWarningLimit: 600
-  },
-  server: {
-    fs: {
-      strict: true,
-      deny: ["**/.*"]
-    }
-  }
-});
-
-// server/vite.ts
-import { nanoid } from "nanoid";
-var viteLogger = createLogger();
-function serveStatic(app2) {
-  const distPath = path2.resolve(import.meta.dirname, "..", "dist", "public");
-  if (!fs.existsSync(distPath)) {
-    throw new Error(
-      `Could not find the build directory: ${distPath}, make sure to build the client first`
-    );
-  }
-  app2.use(express.static(distPath));
-  app2.use("*", (_req, res) => {
-    res.sendFile(path2.resolve(distPath, "index.html"));
-  });
-}
-
 // api/index.ts.source
+import fs from "fs";
+import path from "path";
 dotenv2.config({ path: resolve2(process.cwd(), ".env.local") });
 dotenv2.config({ path: resolve2(process.cwd(), ".env") });
-var app = express2();
-app.use(express2.json({
+var app = express();
+app.use(express.json({
   verify: (req, _res, buf) => {
     req.rawBody = buf;
   }
 }));
-app.use(express2.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: false }));
 app.use((req, res, next) => {
   const start = Date.now();
-  const path3 = req.path;
+  const path2 = req.path;
   let capturedJsonResponse = void 0;
   const originalResJson = res.json;
   res.json = function(bodyJson, ...args) {
@@ -517,8 +429,8 @@ app.use((req, res, next) => {
   };
   res.on("finish", () => {
     const duration = Date.now() - start;
-    if (path3.startsWith("/api")) {
-      let logLine = `${req.method} ${path3} ${res.statusCode} in ${duration}ms`;
+    if (path2.startsWith("/api")) {
+      let logLine = `${req.method} ${path2} ${res.statusCode} in ${duration}ms`;
       if (capturedJsonResponse) {
         logLine += ` :: ${JSON.stringify(capturedJsonResponse)}`;
       }
@@ -544,7 +456,13 @@ async function initializeApp() {
       throw err;
     });
     if (process.env.NODE_ENV !== "development") {
-      serveStatic(app);
+      const distPath = path.resolve(process.cwd(), "dist", "public");
+      if (fs.existsSync(distPath)) {
+        app.use(express.static(distPath));
+        app.use("*", (_req, res) => {
+          res.sendFile(path.resolve(distPath, "index.html"));
+        });
+      }
     }
     appInitialized = true;
   })();

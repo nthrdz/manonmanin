@@ -9,7 +9,8 @@ dotenv.config({ path: resolve(process.cwd(), '.env') });
 
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "../server/routes";
-import { serveStatic } from "../server/vite";
+import fs from "fs";
+import path from "path";
 
 const app = express();
 
@@ -75,9 +76,18 @@ async function initializeApp() {
       throw err;
     });
 
-    // En production, servir les fichiers statiques
+    // En production, servir les fichiers statiques (sans Vite pour éviter Rollup)
     if (process.env.NODE_ENV !== 'development') {
-      serveStatic(app);
+      // Le build Vite crée les fichiers dans dist/public
+      const distPath = path.resolve(process.cwd(), 'dist', 'public');
+      
+      if (fs.existsSync(distPath)) {
+        app.use(express.static(distPath));
+        // fall through to index.html if the file doesn't exist
+        app.use("*", (_req, res) => {
+          res.sendFile(path.resolve(distPath, "index.html"));
+        });
+      }
     }
 
     appInitialized = true;
