@@ -6,7 +6,7 @@ import { join, resolve } from 'path';
 const nodeModules = readdirSync(join(process.cwd(), 'node_modules'));
 
 await build({
-  entryPoints: ['api/index.ts'],
+  entryPoints: ['api/index.ts.source'],
   bundle: true,
   platform: 'node',
   format: 'esm',
