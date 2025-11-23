@@ -8,5 +8,4 @@ vite.config.ts.*
 .env.local
 .env.*.local
 .local
-api/*.js
 api/*.js.map
