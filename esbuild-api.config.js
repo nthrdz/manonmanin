@@ -17,5 +17,8 @@ await build({
     '@shared': resolve(process.cwd(), 'shared'),
   },
   logLevel: 'info',
+  banner: {
+    js: '// Bundled by esbuild - all local modules are included',
+  },
 });
 
