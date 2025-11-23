@@ -97,7 +97,13 @@ app.use(async (req, res, next) => {
   next();
 });
 
-// Export pour Vercel
-// Vercel peut utiliser l'app Express directement
-export default app;
+// Export pour Vercel - wrapper pour Express
+// Vercel attend un handler (req, res) => void
+export default async function handler(req: any, res: any) {
+  // S'assurer que l'app est initialisée
+  await initializeApp();
+  
+  // Passer la requête à Express
+  app(req, res);
+}
 
