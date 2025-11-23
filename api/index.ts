@@ -97,5 +97,12 @@ app.use(async (req, res, next) => {
   next();
 });
 
-export default app;
+// Export pour Vercel - handler serverless
+export default async function handler(req: any, res: any) {
+  // S'assurer que l'app est initialisée
+  await initializeApp();
+  
+  // Passer la requête à Express
+  return app(req, res);
+}
 
