@@ -10,7 +10,7 @@ await build({
   bundle: true,
   platform: 'node',
   format: 'esm',
-  outfile: 'api/index.js', // Fichier de sortie spécifique
+  outfile: resolve(process.cwd(), 'api', 'index.js'), // Fichier de sortie spécifique
   // Ne marquer comme externes QUE les packages npm, pas les modules locaux
   external: nodeModules.filter(pkg => !pkg.startsWith('.')),
   resolveExtensions: ['.ts', '.js', '.tsx', '.jsx'],
