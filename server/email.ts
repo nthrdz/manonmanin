@@ -66,6 +66,12 @@ export class EmailService {
       return { success: false };
     }
 
+    // Log pour diagnostic
+    const contactEmail = process.env.CONTACT_EMAIL || 'contact@manon-manin.fr';
+    console.log(`📧 Sending contact email to: ${contactEmail}`);
+    console.log(`📧 SMTP configured: ${this.isConfigured}`);
+    console.log(`📧 SMTP_HOST: ${process.env.SMTP_HOST ? '✅ Set' : '❌ Not set'}`);
+
     const typeLabels = {
       'post-partum': 'Post-Partum',
       grossesse: 'Grossesse',
