@@ -6,12 +6,13 @@ import { join, resolve } from 'path';
 const nodeModules = readdirSync(join(process.cwd(), 'node_modules'));
 
 await build({
-  entryPoints: ['api/index.ts'],
+  entryPoints: ['api/index.ts.src'],
   bundle: true,
   platform: 'node',
   format: 'esm',
-  outdir: 'api',
-  external: nodeModules,
+  outfile: 'api/index.js', // Fichier de sortie spécifique
+  // Ne marquer comme externes QUE les packages npm, pas les modules locaux
+  external: nodeModules.filter(pkg => !pkg.startsWith('.')),
   resolveExtensions: ['.ts', '.js', '.tsx', '.jsx'],
   alias: {
     '@shared': resolve(process.cwd(), 'shared'),
@@ -20,5 +21,7 @@ await build({
   banner: {
     js: '// Bundled by esbuild - all local modules are included',
   },
+  // Forcer le bundling de tous les modules locaux
+  packages: 'bundle',
 });
 
