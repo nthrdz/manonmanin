@@ -11,6 +11,11 @@ await build({
   platform: 'node',
   format: 'esm',
   outfile: resolve(process.cwd(), 'api', 'index.js'), // Fichier de sortie spécifique
+  loader: {
+    '.ts.source': 'ts',
+    '.ts': 'ts',
+    '.js': 'js',
+  },
   // Ne marquer comme externes QUE les packages npm, pas les modules locaux  
   external: nodeModules,
   resolveExtensions: ['.ts', '.js', '.tsx', '.jsx'],
