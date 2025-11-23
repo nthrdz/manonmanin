@@ -86,7 +86,12 @@ async function initializeApp() {
   return initPromise;
 }
 
-// Middleware pour initialiser l'app avant de traiter les requêtes
+// Initialiser l'app immédiatement (pas de lazy loading pour Vercel)
+initializeApp().catch(err => {
+  console.error('Failed to initialize app:', err);
+});
+
+// Middleware pour s'assurer que l'app est initialisée avant de traiter les requêtes
 app.use(async (req, res, next) => {
   await initializeApp();
   next();
