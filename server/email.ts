@@ -67,7 +67,7 @@ export class EmailService {
     }
 
     // Log pour diagnostic
-    const contactEmail = process.env.CONTACT_EMAIL || 'contact@manon-manin.fr';
+    const contactEmail = process.env.CONTACT_EMAIL || 'contact@manonmanin-mamamia.fr';
     console.log(`📧 Sending contact email to: ${contactEmail}`);
     console.log(`📧 SMTP configured: ${this.isConfigured}`);
     console.log(`📧 SMTP_HOST: ${process.env.SMTP_HOST ? '✅ Set' : '❌ Not set'}`);
@@ -84,8 +84,8 @@ export class EmailService {
 
     try {
       const info = await this.transporter.sendMail({
-        from: `"Site Post-Partum" <${process.env.SMTP_FROM || 'noreply@manon-manin.fr'}>`,
-        to: process.env.CONTACT_EMAIL || 'contact@manon-manin.fr',
+        from: `"Site Post-Partum" <${process.env.SMTP_FROM || 'noreply@manonmanin-mamamia.fr'}>`,
+        to: process.env.CONTACT_EMAIL || 'contact@manonmanin-mamamia.fr',
         replyTo: contact.email,
         subject: `Nouveau message de ${contact.nom}`,
         html: `
