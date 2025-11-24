@@ -28,25 +28,33 @@ export class EmailService {
 
       if (hasSmtpConfig) {
         // Production: Use real SMTP
-        const smtpConfig = {
+        // Configuration SMTP pour OVH
+        const port = parseInt(process.env.SMTP_PORT || '587');
+        const isSecure = process.env.SMTP_SECURE === 'true';
+        
+        const smtpConfig: any = {
           host: process.env.SMTP_HOST,
-          port: parseInt(process.env.SMTP_PORT || '587'),
-          secure: process.env.SMTP_SECURE === 'true',
-          requireTLS: true, // OVH nécessite TLS
+          port: port,
+          secure: isSecure, // true pour port 465 (SSL), false pour port 587 (STARTTLS)
           auth: {
             user: process.env.SMTP_USER,
             pass: process.env.SMTP_PASS,
           },
-          // Options supplémentaires pour OVH
+          // Options TLS pour OVH
           tls: {
             rejectUnauthorized: false, // Pour éviter les problèmes de certificat
-            ciphers: 'SSLv3', // Certains serveurs OVH nécessitent cela
+            minVersion: 'TLSv1.2', // Version TLS minimale
           },
-          // Désactiver la vérification du certificat pour OVH
+          // Timeouts
           connectionTimeout: 10000,
           greetingTimeout: 10000,
           socketTimeout: 10000,
         };
+        
+        // Pour le port 587, utiliser STARTTLS au lieu de SSL direct
+        if (port === 587 && !isSecure) {
+          smtpConfig.requireTLS = true;
+        }
         
         console.log('✅ Email service configured with SMTP');
         console.log(`📧 SMTP_HOST: ${smtpConfig.host}`);
