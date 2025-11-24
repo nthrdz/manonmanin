@@ -95,8 +95,13 @@ export class EmailService {
   }
 
   async sendContactEmail(contact: ContactForm): Promise<{ success: boolean; previewUrl?: string }> {
+    console.log('========================================');
+    console.log('📧 EMAIL SERVICE - sendContactEmail CALLED');
+    console.log('========================================');
+    
     if (!this.transporter) {
-      console.warn('⚠️  Email not sent - transporter not initialized');
+      console.error('❌ Email not sent - transporter not initialized');
+      console.error('❌ Transporter is null - check SMTP configuration');
       return { success: false };
     }
 
@@ -104,7 +109,10 @@ export class EmailService {
     const contactEmail = process.env.CONTACT_EMAIL || 'contact@manonmanin-mamamia.fr';
     console.log(`📧 Sending contact email to: ${contactEmail}`);
     console.log(`📧 SMTP configured: ${this.isConfigured}`);
-    console.log(`📧 SMTP_HOST: ${process.env.SMTP_HOST ? '✅ Set' : '❌ Not set'}`);
+    console.log(`📧 SMTP_HOST: ${process.env.SMTP_HOST ? '✅ Set (' + process.env.SMTP_HOST + ')' : '❌ Not set'}`);
+    console.log(`📧 SMTP_PORT: ${process.env.SMTP_PORT ? '✅ Set (' + process.env.SMTP_PORT + ')' : '❌ Not set'}`);
+    console.log(`📧 SMTP_USER: ${process.env.SMTP_USER ? '✅ Set (' + process.env.SMTP_USER + ')' : '❌ Not set'}`);
+    console.log(`📧 SMTP_PASS: ${process.env.SMTP_PASS ? '✅ Set (' + process.env.SMTP_PASS.length + ' chars)' : '❌ Not set'}`);
     console.log(`📧 Using domain: manonmanin-mamamia.fr`);
 
     const typeLabels = {

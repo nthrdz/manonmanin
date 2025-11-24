@@ -8,9 +8,16 @@ import { z } from "zod";
 export async function registerRoutes(app: Express): Promise<Server> {
   // Contact form submission
   app.post("/api/contact", async (req, res) => {
+    console.log('========================================');
+    console.log('📨 CONTACT FORM SUBMISSION RECEIVED');
+    console.log('========================================');
+    console.log('📧 Request body:', JSON.stringify(req.body, null, 2));
+    console.log('📧 Timestamp:', new Date().toISOString());
+    
     try {
       // Validate request body
       const validatedData = contactSchema.parse(req.body);
+      console.log('✅ Data validated:', validatedData.nom, validatedData.email);
 
       // Save contact to storage
       const savedContact = await storage.saveContact(validatedData);
@@ -19,12 +26,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const emailResult = await emailService.sendContactEmail(validatedData);
       
       // Log le résultat de l'envoi
+      console.log('========================================');
+      console.log('📧 EMAIL SENDING RESULT');
+      console.log('========================================');
       if (!emailResult.success) {
         console.error('❌ Email NOT sent - contact saved but email failed');
         console.error('❌ This means the message was received but email notification failed');
+        console.error('❌ Check SMTP configuration on Vercel');
       } else {
         console.log('✅ Email sent successfully to:', process.env.CONTACT_EMAIL || 'contact@manonmanin-mamamia.fr');
+        console.log('✅ Email result:', JSON.stringify(emailResult, null, 2));
       }
+      console.log('========================================');
       
       // Send confirmation email to user (fire and forget)
       emailService.sendConfirmationEmail(validatedData).catch(err => 
