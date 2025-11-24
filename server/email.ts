@@ -176,7 +176,7 @@ ${contact.message}
 
     try {
       await this.transporter.sendMail({
-        from: `"Accompagnement Post-Partum" <${process.env.SMTP_FROM || 'noreply@manon-manin.fr'}>`,
+        from: `"Accompagnement Post-Partum" <${process.env.SMTP_FROM || 'noreply@manonmanin-mamamia.fr'}>`,
         to: contact.email,
         subject: 'Confirmation de votre message',
         html: `
@@ -240,7 +240,7 @@ Nantes
 
     try {
       await this.transporter.sendMail({
-        from: `"Accompagnement Post-Partum" <${process.env.SMTP_FROM || 'noreply@manon-manin.fr'}>`,
+        from: `"Accompagnement Post-Partum" <${process.env.SMTP_FROM || 'noreply@manonmanin-mamamia.fr'}>`,
         to: newsletter.email,
         subject: 'Bienvenue dans notre newsletter !',
         html: `
