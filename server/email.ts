@@ -32,6 +32,7 @@ export class EmailService {
           host: process.env.SMTP_HOST,
           port: parseInt(process.env.SMTP_PORT || '587'),
           secure: process.env.SMTP_SECURE === 'true',
+          requireTLS: true, // OVH nécessite TLS
           auth: {
             user: process.env.SMTP_USER,
             pass: process.env.SMTP_PASS,
@@ -39,7 +40,12 @@ export class EmailService {
           // Options supplémentaires pour OVH
           tls: {
             rejectUnauthorized: false, // Pour éviter les problèmes de certificat
+            ciphers: 'SSLv3', // Certains serveurs OVH nécessitent cela
           },
+          // Désactiver la vérification du certificat pour OVH
+          connectionTimeout: 10000,
+          greetingTimeout: 10000,
+          socketTimeout: 10000,
         };
         
         console.log('✅ Email service configured with SMTP');
