@@ -28,7 +28,7 @@ export class EmailService {
 
       if (hasSmtpConfig) {
         // Production: Use real SMTP
-        this.transporter = nodemailer.createTransport({
+        const smtpConfig = {
           host: process.env.SMTP_HOST,
           port: parseInt(process.env.SMTP_PORT || '587'),
           secure: process.env.SMTP_SECURE === 'true',
@@ -36,12 +36,29 @@ export class EmailService {
             user: process.env.SMTP_USER,
             pass: process.env.SMTP_PASS,
           },
-        });
-        this.isConfigured = true;
+          // Options supplémentaires pour OVH
+          tls: {
+            rejectUnauthorized: false, // Pour éviter les problèmes de certificat
+          },
+        };
+        
         console.log('✅ Email service configured with SMTP');
-        console.log(`📧 SMTP_HOST: ${process.env.SMTP_HOST}`);
-        console.log(`📧 SMTP_USER: ${process.env.SMTP_USER}`);
+        console.log(`📧 SMTP_HOST: ${smtpConfig.host}`);
+        console.log(`📧 SMTP_PORT: ${smtpConfig.port}`);
+        console.log(`📧 SMTP_SECURE: ${smtpConfig.secure}`);
+        console.log(`📧 SMTP_USER: ${smtpConfig.auth.user}`);
+        console.log(`📧 SMTP_PASS: ${smtpConfig.auth.pass ? '✅ Set (' + smtpConfig.auth.pass.length + ' chars)' : '❌ Not set'}`);
         console.log(`📧 CONTACT_EMAIL: ${process.env.CONTACT_EMAIL || 'contact@manonmanin-mamamia.fr'}`);
+        
+        this.transporter = nodemailer.createTransport(smtpConfig);
+        this.isConfigured = true;
+        
+        // Tester la connexion
+        this.transporter.verify().then(() => {
+          console.log('✅ SMTP connection verified successfully');
+        }).catch((error) => {
+          console.error('❌ SMTP verification failed:', error.message);
+        });
       } else {
         // Development: Use test account
         const testAccount = await nodemailer.createTestAccount();
@@ -184,8 +201,22 @@ ${contact.message}
 
       console.log('✅ Email delivered to SMTP server');
       return { success: true };
-    } catch (error) {
+    } catch (error: any) {
       console.error('❌ Failed to send email:', error);
+      console.error('❌ Error code:', error.code);
+      console.error('❌ Error response:', error.response);
+      console.error('❌ Error command:', error.command);
+      
+      // Suggestions selon le type d'erreur
+      if (error.code === 'EAUTH') {
+        console.error('💡 Suggestion: Vérifiez que SMTP_USER et SMTP_PASS sont corrects');
+        console.error('💡 Vérifiez que l\'adresse email existe bien sur OVH');
+        console.error('💡 Vérifiez que le mot de passe est correct (pas d\'espaces, caractères spéciaux correctement encodés)');
+      } else if (error.code === 'ECONNECTION' || error.code === 'ETIMEDOUT') {
+        console.error('💡 Suggestion: Vérifiez SMTP_HOST et SMTP_PORT');
+        console.error('💡 Essayez avec SMTP_PORT=465 et SMTP_SECURE=true');
+      }
+      
       return { success: false };
     }
   }
