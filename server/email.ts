@@ -87,11 +87,22 @@ export class EmailService {
       : 'Non spécifié';
 
     try {
-      const info = await this.transporter.sendMail({
+      const emailConfig = {
         from: `"Site Post-Partum" <${process.env.SMTP_FROM || 'noreply@manonmanin-mamamia.fr'}>`,
         to: process.env.CONTACT_EMAIL || 'contact@manonmanin-mamamia.fr',
         replyTo: contact.email,
         subject: `Nouveau message de ${contact.nom}`,
+      };
+      
+      console.log('📧 Email config:', {
+        from: emailConfig.from,
+        to: emailConfig.to,
+        subject: emailConfig.subject,
+        replyTo: emailConfig.replyTo
+      });
+      
+      const info = await this.transporter.sendMail({
+        ...emailConfig,
         html: `
           <div style="font-family: 'Inter', Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f5f0;">
             <div style="background-color: white; border-radius: 12px; padding: 32px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
@@ -155,17 +166,23 @@ ${contact.message}
         `,
       });
 
-      console.log('✅ Email sent:', info.messageId);
+      console.log('✅ Email sent successfully!');
+      console.log('📧 Message ID:', info.messageId);
+      console.log('📧 Response:', info.response);
+      console.log('📧 Accepted:', info.accepted);
+      console.log('📧 Rejected:', info.rejected);
 
       // If using Ethereal, get preview URL
       if (!this.isConfigured) {
         const previewUrl = nodemailer.getTestMessageUrl(info);
         if (previewUrl) {
-          console.log('📧 Preview URL:', previewUrl);
+          console.log('⚠️  Using Ethereal test account - Preview URL:', previewUrl);
+          console.log('⚠️  Email NOT sent to real address! Configure SMTP on Vercel.');
           return { success: true, previewUrl };
         }
       }
 
+      console.log('✅ Email delivered to SMTP server');
       return { success: true };
     } catch (error) {
       console.error('❌ Failed to send email:', error);
