@@ -37,8 +37,8 @@ export class EmailService {
           port: port,
           secure: isSecure, // true pour port 465 (SSL), false pour port 587 (STARTTLS)
           auth: {
-            user: process.env.SMTP_USER,
-            pass: process.env.SMTP_PASS,
+            user: process.env.SMTP_USER?.trim(), // Enlever les espaces
+            pass: process.env.SMTP_PASS?.trim(), // Enlever les espaces
           },
           // Options TLS pour OVH
           tls: {
@@ -46,15 +46,28 @@ export class EmailService {
             minVersion: 'TLSv1.2', // Version TLS minimale
           },
           // Timeouts
-          connectionTimeout: 10000,
-          greetingTimeout: 10000,
-          socketTimeout: 10000,
+          connectionTimeout: 15000,
+          greetingTimeout: 15000,
+          socketTimeout: 15000,
+          // Désactiver le pool de connexions pour éviter les problèmes
+          pool: false,
         };
         
         // Pour le port 587, utiliser STARTTLS au lieu de SSL direct
         if (port === 587 && !isSecure) {
           smtpConfig.requireTLS = true;
+          smtpConfig.ignoreTLS = false;
         }
+        
+        // Log détaillé pour diagnostic
+        console.log('🔍 SMTP Configuration Details:');
+        console.log(`   Host: "${smtpConfig.host}"`);
+        console.log(`   Port: ${smtpConfig.port}`);
+        console.log(`   Secure: ${smtpConfig.secure}`);
+        console.log(`   User: "${smtpConfig.auth.user}" (length: ${smtpConfig.auth.user?.length || 0})`);
+        console.log(`   Pass: "${'*'.repeat(smtpConfig.auth.pass?.length || 0)}" (length: ${smtpConfig.auth.pass?.length || 0})`);
+        console.log(`   User contains spaces: ${smtpConfig.auth.user?.includes(' ') ? '⚠️ YES' : '✅ NO'}`);
+        console.log(`   Pass contains spaces: ${smtpConfig.auth.pass?.includes(' ') ? '⚠️ YES' : '✅ NO'}`);
         
         console.log('✅ Email service configured with SMTP');
         console.log(`📧 SMTP_HOST: ${smtpConfig.host}`);
