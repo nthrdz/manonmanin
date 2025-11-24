@@ -112,6 +112,10 @@ var EmailService = class {
       console.warn("\u26A0\uFE0F  Email not sent - transporter not initialized");
       return { success: false };
     }
+    const contactEmail = process.env.CONTACT_EMAIL || "contact@manonmanin-mamamia.fr";
+    console.log(`\u{1F4E7} Sending contact email to: ${contactEmail}`);
+    console.log(`\u{1F4E7} SMTP configured: ${this.isConfigured}`);
+    console.log(`\u{1F4E7} SMTP_HOST: ${process.env.SMTP_HOST ? "\u2705 Set" : "\u274C Not set"}`);
     const typeLabels = {
       "post-partum": "Post-Partum",
       grossesse: "Grossesse",
@@ -120,8 +124,8 @@ var EmailService = class {
     const typeText = contact.typeAccompagnement ? typeLabels[contact.typeAccompagnement] : "Non sp\xE9cifi\xE9";
     try {
       const info = await this.transporter.sendMail({
-        from: `"Site Post-Partum" <${process.env.SMTP_FROM || "noreply@manon-manin.fr"}>`,
-        to: process.env.CONTACT_EMAIL || "contact@manon-manin.fr",
+        from: `"Site Post-Partum" <${process.env.SMTP_FROM || "noreply@manonmanin-mamamia.fr"}>`,
+        to: process.env.CONTACT_EMAIL || "contact@manonmanin-mamamia.fr",
         replyTo: contact.email,
         subject: `Nouveau message de ${contact.nom}`,
         html: `
@@ -202,7 +206,7 @@ ${contact.message}
     }
     try {
       await this.transporter.sendMail({
-        from: `"Accompagnement Post-Partum" <${process.env.SMTP_FROM || "noreply@manon-manin.fr"}>`,
+        from: `"Accompagnement Post-Partum" <${process.env.SMTP_FROM || "noreply@manonmanin-mamamia.fr"}>`,
         to: contact.email,
         subject: "Confirmation de votre message",
         html: `
@@ -263,7 +267,7 @@ Nantes
     }
     try {
       await this.transporter.sendMail({
-        from: `"Accompagnement Post-Partum" <${process.env.SMTP_FROM || "noreply@manon-manin.fr"}>`,
+        from: `"Accompagnement Post-Partum" <${process.env.SMTP_FROM || "noreply@manonmanin-mamamia.fr"}>`,
         to: newsletter.email,
         subject: "Bienvenue dans notre newsletter !",
         html: `
