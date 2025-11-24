@@ -18,6 +18,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Send emails (notification + confirmation)
       const emailResult = await emailService.sendContactEmail(validatedData);
       
+      // Log le résultat de l'envoi
+      if (!emailResult.success) {
+        console.error('❌ Email NOT sent - contact saved but email failed');
+        console.error('❌ This means the message was received but email notification failed');
+      } else {
+        console.log('✅ Email sent successfully to:', process.env.CONTACT_EMAIL || 'contact@manonmanin-mamamia.fr');
+      }
+      
       // Send confirmation email to user (fire and forget)
       emailService.sendConfirmationEmail(validatedData).catch(err => 
         console.error('Failed to send confirmation:', err)
@@ -27,6 +35,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         success: true,
         message: "Votre message a été envoyé avec succès !",
         id: savedContact.id,
+        emailSent: emailResult.success,
         ...(emailResult.previewUrl && { previewUrl: emailResult.previewUrl }),
       });
     } catch (error) {
