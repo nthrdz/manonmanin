@@ -74,6 +74,7 @@ export class EmailService {
     console.log(`📧 Sending contact email to: ${contactEmail}`);
     console.log(`📧 SMTP configured: ${this.isConfigured}`);
     console.log(`📧 SMTP_HOST: ${process.env.SMTP_HOST ? '✅ Set' : '❌ Not set'}`);
+    console.log(`📧 Using domain: manonmanin-mamamia.fr`);
 
     const typeLabels = {
       'post-partum': 'Post-Partum',
