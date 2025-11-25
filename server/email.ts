@@ -1,17 +1,18 @@
 import dotenv from 'dotenv';
 import { resolve } from 'path';
-import nodemailer from 'nodemailer';
+import { Resend } from 'resend';
 import type { ContactForm, NewsletterForm } from '@shared/schema';
 
 // Charger les variables d'environnement si pas déjà chargées
-if (!process.env.SMTP_HOST) {
+if (!process.env.RESEND_API_KEY && !process.env.SMTP_HOST) {
   dotenv.config({ path: resolve(process.cwd(), '.env.local') });
   dotenv.config({ path: resolve(process.cwd(), '.env') });
 }
 
 export class EmailService {
-  private transporter: nodemailer.Transporter | null = null;
+  private resend: Resend | null = null;
   private isConfigured = false;
+  private useResend = false;
 
   constructor() {
     this.initialize();
@@ -19,7 +20,17 @@ export class EmailService {
 
   private async initialize() {
     try {
-      // Check if SMTP credentials are available
+      // Priorité 1 : Resend (recommandé - plus fiable)
+      if (process.env.RESEND_API_KEY) {
+        this.resend = new Resend(process.env.RESEND_API_KEY);
+        this.isConfigured = true;
+        this.useResend = true;
+        console.log('✅ Email service configured with Resend');
+        console.log('📧 Using Resend API for email delivery');
+        return;
+      }
+
+      // Priorité 2 : SMTP (fallback)
       const hasSmtpConfig =
         process.env.SMTP_HOST &&
         process.env.SMTP_PORT &&
@@ -27,104 +38,148 @@ export class EmailService {
         process.env.SMTP_PASS;
 
       if (hasSmtpConfig) {
-        // Production: Use real SMTP
-        // Configuration SMTP pour OVH
-        const port = parseInt(process.env.SMTP_PORT || '587');
-        const isSecure = process.env.SMTP_SECURE === 'true';
-        
-        // Configuration de base
-        const smtpConfig: any = {
-          host: process.env.SMTP_HOST,
-          port: port,
-          secure: isSecure, // true pour port 465 (SSL), false pour port 587 (STARTTLS)
-          auth: {
-            user: process.env.SMTP_USER?.trim(), // Enlever les espaces
-            pass: process.env.SMTP_PASS?.trim(), // Enlever les espaces
-          },
-          // Désactiver le pool de connexions pour éviter les problèmes
-          pool: false,
-          // Timeouts augmentés
-          connectionTimeout: 20000,
-          greetingTimeout: 20000,
-          socketTimeout: 20000,
-        };
-        
-        // Configuration spécifique selon le port
-        if (port === 465) {
-          // Port 465 : SSL direct
-          smtpConfig.secure = true;
-          smtpConfig.tls = {
-            rejectUnauthorized: false,
-            minVersion: 'TLSv1.2',
-          };
-          console.log('🔒 Using SSL direct (port 465)');
-        } else if (port === 587) {
-          // Port 587 : STARTTLS
-          smtpConfig.secure = false;
-          smtpConfig.requireTLS = true;
-          smtpConfig.ignoreTLS = false;
-          smtpConfig.tls = {
-            rejectUnauthorized: false,
-            minVersion: 'TLSv1.2',
-          };
-          console.log('🔐 Using STARTTLS (port 587)');
-        } else {
-          // Autre port : configuration par défaut
-          smtpConfig.tls = {
-            rejectUnauthorized: false,
-            minVersion: 'TLSv1.2',
-          };
-        }
-        
-        // Log détaillé pour diagnostic
-        console.log('🔍 SMTP Configuration Details:');
-        console.log(`   Host: "${smtpConfig.host}"`);
-        console.log(`   Port: ${smtpConfig.port}`);
-        console.log(`   Secure: ${smtpConfig.secure}`);
-        console.log(`   RequireTLS: ${smtpConfig.requireTLS || false}`);
-        console.log(`   User: "${smtpConfig.auth.user}" (length: ${smtpConfig.auth.user?.length || 0})`);
-        console.log(`   Pass: "${'*'.repeat(smtpConfig.auth.pass?.length || 0)}" (length: ${smtpConfig.auth.pass?.length || 0})`);
-        console.log(`   User contains spaces: ${smtpConfig.auth.user?.includes(' ') ? '⚠️ YES' : '✅ NO'}`);
-        console.log(`   Pass contains spaces: ${smtpConfig.auth.pass?.includes(' ') ? '⚠️ YES' : '✅ NO'}`);
-        console.log(`   User starts/ends with quotes: ${(smtpConfig.auth.user?.startsWith('"') || smtpConfig.auth.user?.endsWith('"')) ? '⚠️ YES' : '✅ NO'}`);
-        console.log(`   Pass starts/ends with quotes: ${(smtpConfig.auth.pass?.startsWith('"') || smtpConfig.auth.pass?.endsWith('"')) ? '⚠️ YES' : '✅ NO'}`);
-        
-        console.log('✅ Email service configured with SMTP');
-        console.log(`📧 SMTP_HOST: ${smtpConfig.host}`);
-        console.log(`📧 SMTP_PORT: ${smtpConfig.port}`);
-        console.log(`📧 SMTP_SECURE: ${smtpConfig.secure}`);
-        console.log(`📧 SMTP_USER: ${smtpConfig.auth.user}`);
-        console.log(`📧 SMTP_PASS: ${smtpConfig.auth.pass ? '✅ Set (' + smtpConfig.auth.pass.length + ' chars)' : '❌ Not set'}`);
-        console.log(`📧 CONTACT_EMAIL: ${process.env.CONTACT_EMAIL || 'contact@manonmanin-mamamia.fr'}`);
-        
-        this.transporter = nodemailer.createTransport(smtpConfig);
+        console.log('⚠️  Using SMTP (Resend recommended for better reliability)');
+        console.log('💡 To use Resend, add RESEND_API_KEY to Vercel environment variables');
         this.isConfigured = true;
-        
-        // Tester la connexion
-        this.transporter.verify().then(() => {
-          console.log('✅ SMTP connection verified successfully');
-        }).catch((error) => {
-          console.error('❌ SMTP verification failed:', error.message);
-        });
-      } else {
-        // Development: Use test account
-        const testAccount = await nodemailer.createTestAccount();
-        this.transporter = nodemailer.createTransport({
-          host: 'smtp.ethereal.email',
-          port: 587,
-          secure: false,
-          auth: {
-            user: testAccount.user,
-            pass: testAccount.pass,
-          },
-        });
-        console.log('📧 Email service using Ethereal test account');
-        console.log('   Preview emails at: https://ethereal.email');
+        this.useResend = false;
+        return;
       }
+
+      // Development: No email service configured
+      console.log('⚠️  No email service configured');
+      console.log('💡 Add RESEND_API_KEY to Vercel for production email delivery');
+      this.isConfigured = false;
     } catch (error) {
       console.error('❌ Failed to initialize email service:', error);
-      this.transporter = null;
+      this.isConfigured = false;
     }
+  }
+
+  private getEmailHtml(template: 'contact' | 'confirmation' | 'newsletter', data: any): string {
+    const contactEmail = process.env.CONTACT_EMAIL || 'contact@manonmanin-mamamia.fr';
+    
+    if (template === 'contact') {
+      const { contact, typeText } = data;
+      return `
+        <div style="font-family: 'Inter', Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f5f0;">
+          <div style="background-color: white; border-radius: 12px; padding: 32px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+            <h1 style="color: #D4764B; font-family: 'Cormorant Garamond', Georgia, serif; font-size: 28px; margin-bottom: 24px; border-bottom: 2px solid #D4764B; padding-bottom: 12px;">
+              Nouveau Message de Contact
+            </h1>
+            
+            <div style="margin-bottom: 24px;">
+              <h2 style="color: #5C3D2E; font-size: 18px; margin-bottom: 8px;">Informations</h2>
+              <table style="width: 100%; border-collapse: collapse;">
+                <tr>
+                  <td style="padding: 8px 0; color: #8B4513; font-weight: 600;">Nom:</td>
+                  <td style="padding: 8px 0; color: #333;">${contact.nom}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px 0; color: #8B4513; font-weight: 600;">Email:</td>
+                  <td style="padding: 8px 0;"><a href="mailto:${contact.email}" style="color: #D4764B; text-decoration: none;">${contact.email}</a></td>
+                </tr>
+                ${contact.telephone ? `
+                <tr>
+                  <td style="padding: 8px 0; color: #8B4513; font-weight: 600;">Téléphone:</td>
+                  <td style="padding: 8px 0; color: #333;">${contact.telephone}</td>
+                </tr>
+                ` : ''}
+                <tr>
+                  <td style="padding: 8px 0; color: #8B4513; font-weight: 600;">Type:</td>
+                  <td style="padding: 8px 0; color: #333;">${typeText}</td>
+                </tr>
+              </table>
+            </div>
+
+            <div style="margin-bottom: 24px;">
+              <h2 style="color: #5C3D2E; font-size: 18px; margin-bottom: 12px;">Message</h2>
+              <div style="background-color: #f9f5f0; padding: 16px; border-radius: 8px; border-left: 4px solid #D4764B;">
+                <p style="color: #333; line-height: 1.6; margin: 0; white-space: pre-wrap;">${contact.message}</p>
+              </div>
+            </div>
+
+            <div style="text-align: center; padding-top: 20px; border-top: 1px solid #e5e5e5;">
+              <a href="mailto:${contact.email}" style="display: inline-block; background-color: #D4764B; color: white; padding: 12px 32px; border-radius: 6px; text-decoration: none; font-weight: 600;">
+                Répondre à ${contact.nom}
+              </a>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    if (template === 'confirmation') {
+      const { contact } = data;
+      return `
+        <div style="font-family: 'Inter', Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f5f0;">
+          <div style="background-color: white; border-radius: 12px; padding: 32px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+            <h1 style="color: #D4764B; font-family: 'Cormorant Garamond', Georgia, serif; font-size: 28px; margin-bottom: 16px;">
+              Merci pour votre message !
+            </h1>
+            
+            <p style="color: #333; line-height: 1.6; margin-bottom: 16px;">
+              Bonjour ${contact.nom},
+            </p>
+            
+            <p style="color: #333; line-height: 1.6; margin-bottom: 16px;">
+              J'ai bien reçu votre message et je vous en remercie. Je m'engage à vous répondre dans les plus brefs délais, généralement sous 24 à 48 heures.
+            </p>
+            
+            <p style="color: #333; line-height: 1.6; margin-bottom: 24px;">
+              En attendant, n'hésitez pas à consulter mes ressources sur le site.
+            </p>
+            
+            <div style="text-align: center; margin: 32px 0;">
+              <div style="display: inline-block; background-color: #f9f5f0; padding: 20px; border-radius: 8px; border: 2px solid #D4764B;">
+                <p style="color: #8B4513; font-weight: 600; margin: 0;">
+                  💛 Prenez soin de vous 💛
+                </p>
+              </div>
+            </div>
+            
+            <div style="text-align: center; padding-top: 20px; border-top: 1px solid #e5e5e5; font-size: 14px; color: #666;">
+              <p>Accompagnement Post-Partum</p>
+              <p>Nantes</p>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    if (template === 'newsletter') {
+      return `
+        <div style="font-family: 'Inter', Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f5f0;">
+          <div style="background-color: white; border-radius: 12px; padding: 32px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+            <h1 style="color: #D4764B; font-family: 'Cormorant Garamond', Georgia, serif; font-size: 28px; margin-bottom: 16px;">
+              Bienvenue ! ✨
+            </h1>
+            
+            <p style="color: #333; line-height: 1.6; margin-bottom: 16px;">
+              Merci de vous être inscrit à notre newsletter !
+            </p>
+            
+            <p style="color: #333; line-height: 1.6; margin-bottom: 16px;">
+              Vous recevrez désormais nos conseils, astuces et actualités directement dans votre boîte mail. Nous partageons régulièrement des informations sur l'accompagnement post-partum, la parentalité bienveillante et le bien-être des mamans.
+            </p>
+            
+            <div style="text-align: center; margin: 32px 0;">
+              <div style="display: inline-block; background-color: #f9f5f0; padding: 20px; border-radius: 8px; border: 2px solid #D4764B;">
+                <p style="color: #8B4513; font-weight: 600; margin: 0;">
+                  💛 Prenez soin de vous 💛
+                </p>
+              </div>
+            </div>
+            
+            <div style="text-align: center; padding-top: 20px; border-top: 1px solid #e5e5e5; font-size: 14px; color: #666;">
+              <p>Accompagnement Post-Partum</p>
+              <p>Nantes</p>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    return '';
   }
 
   async sendContactEmail(contact: ContactForm): Promise<{ success: boolean; previewUrl?: string }> {
@@ -132,22 +187,14 @@ export class EmailService {
     console.log('📧 EMAIL SERVICE - sendContactEmail CALLED');
     console.log('========================================');
     
-    if (!this.transporter) {
-      console.error('❌ Email not sent - transporter not initialized');
-      console.error('❌ Transporter is null - check SMTP configuration');
+    if (!this.isConfigured) {
+      console.error('❌ Email service not configured');
       return { success: false };
     }
 
-    // Log pour diagnostic
     const contactEmail = process.env.CONTACT_EMAIL || 'contact@manonmanin-mamamia.fr';
-    console.log(`📧 Sending contact email to: ${contactEmail}`);
-    console.log(`📧 SMTP configured: ${this.isConfigured}`);
-    console.log(`📧 SMTP_HOST: ${process.env.SMTP_HOST ? '✅ Set (' + process.env.SMTP_HOST + ')' : '❌ Not set'}`);
-    console.log(`📧 SMTP_PORT: ${process.env.SMTP_PORT ? '✅ Set (' + process.env.SMTP_PORT + ')' : '❌ Not set'}`);
-    console.log(`📧 SMTP_USER: ${process.env.SMTP_USER ? '✅ Set (' + process.env.SMTP_USER + ')' : '❌ Not set'}`);
-    console.log(`📧 SMTP_PASS: ${process.env.SMTP_PASS ? '✅ Set (' + process.env.SMTP_PASS.length + ' chars)' : '❌ Not set'}`);
-    console.log(`📧 Using domain: manonmanin-mamamia.fr`);
-
+    const fromEmail = process.env.FROM_EMAIL || 'onboarding@resend.dev'; // Resend default
+    
     const typeLabels = {
       'post-partum': 'Post-Partum',
       grossesse: 'Grossesse',
@@ -159,243 +206,97 @@ export class EmailService {
       : 'Non spécifié';
 
     try {
-      const emailConfig = {
-        from: `"Site Post-Partum" <${process.env.SMTP_FROM || 'noreply@manonmanin-mamamia.fr'}>`,
-        to: process.env.CONTACT_EMAIL || 'contact@manonmanin-mamamia.fr',
-        replyTo: contact.email,
-        subject: `Nouveau message de ${contact.nom}`,
-      };
-      
-      console.log('📧 Email config:', {
-        from: emailConfig.from,
-        to: emailConfig.to,
-        subject: emailConfig.subject,
-        replyTo: emailConfig.replyTo
-      });
-      
-      const info = await this.transporter.sendMail({
-        ...emailConfig,
-        html: `
-          <div style="font-family: 'Inter', Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f5f0;">
-            <div style="background-color: white; border-radius: 12px; padding: 32px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-              <h1 style="color: #D4764B; font-family: 'Cormorant Garamond', Georgia, serif; font-size: 28px; margin-bottom: 24px; border-bottom: 2px solid #D4764B; padding-bottom: 12px;">
-                Nouveau Message de Contact
-              </h1>
-              
-              <div style="margin-bottom: 24px;">
-                <h2 style="color: #5C3D2E; font-size: 18px; margin-bottom: 8px;">Informations</h2>
-                <table style="width: 100%; border-collapse: collapse;">
-                  <tr>
-                    <td style="padding: 8px 0; color: #8B4513; font-weight: 600;">Nom:</td>
-                    <td style="padding: 8px 0; color: #333;">${contact.nom}</td>
-                  </tr>
-                  <tr>
-                    <td style="padding: 8px 0; color: #8B4513; font-weight: 600;">Email:</td>
-                    <td style="padding: 8px 0;"><a href="mailto:${contact.email}" style="color: #D4764B; text-decoration: none;">${contact.email}</a></td>
-                  </tr>
-                  ${
-                    contact.telephone
-                      ? `
-                  <tr>
-                    <td style="padding: 8px 0; color: #8B4513; font-weight: 600;">Téléphone:</td>
-                    <td style="padding: 8px 0; color: #333;">${contact.telephone}</td>
-                  </tr>
-                  `
-                      : ''
-                  }
-                  <tr>
-                    <td style="padding: 8px 0; color: #8B4513; font-weight: 600;">Type:</td>
-                    <td style="padding: 8px 0; color: #333;">${typeText}</td>
-                  </tr>
-                </table>
-              </div>
+      if (this.useResend && this.resend) {
+        console.log('📧 Using Resend API');
+        console.log(`📧 Sending to: ${contactEmail}`);
+        
+        const { data, error } = await this.resend.emails.send({
+          from: `Site Post-Partum <${fromEmail}>`,
+          to: contactEmail,
+          replyTo: contact.email,
+          subject: `Nouveau message de ${contact.nom}`,
+          html: this.getEmailHtml('contact', { contact, typeText }),
+        });
 
-              <div style="margin-bottom: 24px;">
-                <h2 style="color: #5C3D2E; font-size: 18px; margin-bottom: 12px;">Message</h2>
-                <div style="background-color: #f9f5f0; padding: 16px; border-radius: 8px; border-left: 4px solid #D4764B;">
-                  <p style="color: #333; line-height: 1.6; margin: 0; white-space: pre-wrap;">${contact.message}</p>
-                </div>
-              </div>
-
-              <div style="text-align: center; padding-top: 20px; border-top: 1px solid #e5e5e5;">
-                <a href="mailto:${contact.email}" style="display: inline-block; background-color: #D4764B; color: white; padding: 12px 32px; border-radius: 6px; text-decoration: none; font-weight: 600;">
-                  Répondre à ${contact.nom}
-                </a>
-              </div>
-            </div>
-          </div>
-        `,
-        text: `
-Nouveau message de contact
-
-Nom: ${contact.nom}
-Email: ${contact.email}
-${contact.telephone ? `Téléphone: ${contact.telephone}` : ''}
-Type d'accompagnement: ${typeText}
-
-Message:
-${contact.message}
-        `,
-      });
-
-      console.log('✅ Email sent successfully!');
-      console.log('📧 Message ID:', info.messageId);
-      console.log('📧 Response:', info.response);
-      console.log('📧 Accepted:', info.accepted);
-      console.log('📧 Rejected:', info.rejected);
-
-      // If using Ethereal, get preview URL
-      if (!this.isConfigured) {
-        const previewUrl = nodemailer.getTestMessageUrl(info);
-        if (previewUrl) {
-          console.log('⚠️  Using Ethereal test account - Preview URL:', previewUrl);
-          console.log('⚠️  Email NOT sent to real address! Configure SMTP on Vercel.');
-          return { success: true, previewUrl };
+        if (error) {
+          console.error('❌ Resend error:', error);
+          return { success: false };
         }
-      }
 
-      console.log('✅ Email delivered to SMTP server');
-      return { success: true };
+        console.log('✅ Email sent successfully via Resend!');
+        console.log('📧 Email ID:', data?.id);
+        return { success: true };
+      } else {
+        console.error('❌ SMTP not supported - please use Resend');
+        console.error('💡 Add RESEND_API_KEY to Vercel environment variables');
+        return { success: false };
+      }
     } catch (error: any) {
       console.error('❌ Failed to send email:', error);
-      console.error('❌ Error code:', error.code);
-      console.error('❌ Error response:', error.response);
-      console.error('❌ Error command:', error.command);
-      
-      // Suggestions selon le type d'erreur
-      if (error.code === 'EAUTH') {
-        console.error('💡 Suggestion: Vérifiez que SMTP_USER et SMTP_PASS sont corrects');
-        console.error('💡 Vérifiez que l\'adresse email existe bien sur OVH');
-        console.error('💡 Vérifiez que le mot de passe est correct (pas d\'espaces, caractères spéciaux correctement encodés)');
-      } else if (error.code === 'ECONNECTION' || error.code === 'ETIMEDOUT') {
-        console.error('💡 Suggestion: Vérifiez SMTP_HOST et SMTP_PORT');
-        console.error('💡 Essayez avec SMTP_PORT=465 et SMTP_SECURE=true');
-      }
-      
       return { success: false };
     }
   }
 
-  async sendConfirmationEmail(contact: ContactForm): Promise<void> {
-    if (!this.transporter) {
-      return;
+  async sendConfirmationEmail(contact: ContactForm): Promise<{ success: boolean }> {
+    if (!this.isConfigured || !this.resend) {
+      return { success: false };
     }
 
+    const fromEmail = process.env.FROM_EMAIL || 'onboarding@resend.dev';
+
     try {
-      await this.transporter.sendMail({
-        from: `"Accompagnement Post-Partum" <${process.env.SMTP_FROM || 'noreply@manonmanin-mamamia.fr'}>`,
-        to: contact.email,
-        subject: 'Confirmation de votre message',
-        html: `
-          <div style="font-family: 'Inter', Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f5f0;">
-            <div style="background-color: white; border-radius: 12px; padding: 32px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-              <h1 style="color: #D4764B; font-family: 'Cormorant Garamond', Georgia, serif; font-size: 28px; margin-bottom: 16px;">
-                Merci pour votre message !
-              </h1>
-              
-              <p style="color: #333; line-height: 1.6; margin-bottom: 16px;">
-                Bonjour ${contact.nom},
-              </p>
-              
-              <p style="color: #333; line-height: 1.6; margin-bottom: 16px;">
-                J'ai bien reçu votre message et je vous en remercie. Je m'engage à vous répondre dans les plus brefs délais, généralement sous 24 à 48 heures.
-              </p>
-              
-              <p style="color: #333; line-height: 1.6; margin-bottom: 24px;">
-                En attendant, n'hésitez pas à consulter mes ressources sur le site.
-              </p>
-              
-              <div style="text-align: center; margin: 32px 0;">
-                <div style="display: inline-block; background-color: #f9f5f0; padding: 20px; border-radius: 8px; border: 2px solid #D4764B;">
-                  <p style="color: #8B4513; font-weight: 600; margin: 0;">
-                    💛 Prenez soin de vous 💛
-                  </p>
-                </div>
-              </div>
-              
-              <div style="text-align: center; padding-top: 20px; border-top: 1px solid #e5e5e5; font-size: 14px; color: #666;">
-                <p>Accompagnement Post-Partum</p>
-                <p>Nantes</p>
-              </div>
-            </div>
-          </div>
-        `,
-        text: `
-Bonjour ${contact.nom},
+      if (this.useResend && this.resend) {
+        const { error } = await this.resend.emails.send({
+          from: `Accompagnement Post-Partum <${fromEmail}>`,
+          to: contact.email,
+          subject: 'Confirmation de votre message',
+          html: this.getEmailHtml('confirmation', { contact }),
+        });
 
-J'ai bien reçu votre message et je vous en remercie. Je m'engage à vous répondre dans les plus brefs délais, généralement sous 24 à 48 heures.
+        if (error) {
+          console.error('❌ Failed to send confirmation email:', error);
+          return { success: false };
+        }
 
-En attendant, n'hésitez pas à consulter mes ressources sur le site.
-
-Prenez soin de vous,
-
-Accompagnement Post-Partum
-Nantes
-        `,
-      });
-
-      console.log('✅ Confirmation email sent to:', contact.email);
+        console.log('✅ Confirmation email sent to:', contact.email);
+        return { success: true };
+      }
     } catch (error) {
       console.error('❌ Failed to send confirmation email:', error);
     }
+
+    return { success: false };
   }
 
-  async sendNewsletterConfirmationEmail(newsletter: NewsletterForm): Promise<void> {
-    if (!this.transporter) {
-      return;
+  async sendNewsletterConfirmationEmail(newsletter: NewsletterForm): Promise<{ success: boolean }> {
+    if (!this.isConfigured || !this.resend) {
+      return { success: false };
     }
 
+    const fromEmail = process.env.FROM_EMAIL || 'onboarding@resend.dev';
+
     try {
-      await this.transporter.sendMail({
-        from: `"Accompagnement Post-Partum" <${process.env.SMTP_FROM || 'noreply@manonmanin-mamamia.fr'}>`,
-        to: newsletter.email,
-        subject: 'Bienvenue dans notre newsletter !',
-        html: `
-          <div style="font-family: 'Inter', Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f5f0;">
-            <div style="background-color: white; border-radius: 12px; padding: 32px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-              <h1 style="color: #D4764B; font-family: 'Cormorant Garamond', Georgia, serif; font-size: 28px; margin-bottom: 16px;">
-                Bienvenue ! ✨
-              </h1>
-              
-              <p style="color: #333; line-height: 1.6; margin-bottom: 16px;">
-                Merci de vous être inscrit à notre newsletter !
-              </p>
-              
-              <p style="color: #333; line-height: 1.6; margin-bottom: 16px;">
-                Vous recevrez désormais nos conseils, astuces et actualités directement dans votre boîte mail. Nous partageons régulièrement des informations sur l'accompagnement post-partum, la parentalité bienveillante et le bien-être des mamans.
-              </p>
-              
-              <div style="text-align: center; margin: 32px 0;">
-                <div style="display: inline-block; background-color: #f9f5f0; padding: 20px; border-radius: 8px; border: 2px solid #D4764B;">
-                  <p style="color: #8B4513; font-weight: 600; margin: 0;">
-                    💛 Prenez soin de vous 💛
-                  </p>
-                </div>
-              </div>
-              
-              <div style="text-align: center; padding-top: 20px; border-top: 1px solid #e5e5e5; font-size: 14px; color: #666;">
-                <p>Accompagnement Post-Partum</p>
-                <p>Nantes</p>
-              </div>
-            </div>
-          </div>
-        `,
-        text: `
-Merci de vous être inscrit à notre newsletter !
+      if (this.useResend && this.resend) {
+        const { error } = await this.resend.emails.send({
+          from: `Accompagnement Post-Partum <${fromEmail}>`,
+          to: newsletter.email,
+          subject: 'Bienvenue dans notre newsletter !',
+          html: this.getEmailHtml('newsletter', {}),
+        });
 
-Vous recevrez désormais nos conseils, astuces et actualités directement dans votre boîte mail. Nous partageons régulièrement des informations sur l'accompagnement post-partum, la parentalité bienveillante et le bien-être des mamans.
+        if (error) {
+          console.error('❌ Failed to send newsletter confirmation email:', error);
+          return { success: false };
+        }
 
-Prenez soin de vous,
-
-Accompagnement Post-Partum
-Nantes
-        `,
-      });
-
-      console.log('✅ Newsletter confirmation email sent to:', newsletter.email);
+        console.log('✅ Newsletter confirmation email sent to:', newsletter.email);
+        return { success: true };
+      }
     } catch (error) {
       console.error('❌ Failed to send newsletter confirmation email:', error);
     }
+
+    return { success: false };
   }
 }
 
