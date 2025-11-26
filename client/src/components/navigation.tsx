@@ -61,7 +61,7 @@ export function Navigation() {
           <div className="flex items-center justify-between h-16 lg:h-20">
             {/* Logo */}
             <motion.div
-              className="flex items-center gap-2 cursor-pointer"
+              className="flex items-center gap-3 cursor-pointer"
               onClick={() => scrollToSection('#hero')}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -72,6 +72,9 @@ export function Navigation() {
                 alt="Logo Manon" 
                 className="h-16 lg:h-20 w-auto object-contain"
               />
+              <span className="font-serif text-xl lg:text-2xl font-semibold text-foreground">
+                Manon Mamamia
+              </span>
             </motion.div>
 
             {/* Desktop Navigation */}
