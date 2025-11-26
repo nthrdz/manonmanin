@@ -84,8 +84,8 @@ export function NewsletterPopup() {
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <div className="flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mx-auto mb-4">
-            <Sparkles className="w-8 h-8 text-primary" />
+          <div className="flex items-center justify-center w-16 h-16 rounded-full bg-chart-1/15 mx-auto mb-4 border border-chart-1/20">
+            <Sparkles className="w-8 h-8 text-chart-1" />
           </div>
           <DialogTitle className="text-center font-serif text-2xl">
             Restez informée

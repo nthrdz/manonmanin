@@ -85,7 +85,7 @@ export function Resources() {
   });
 
   return (
-    <section id="resources" className="py-20 lg:py-32 bg-card/30" ref={ref}>
+    <section id="resources" className="py-20 lg:py-32 bg-chart-2/3" ref={ref}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           className="text-center max-w-3xl mx-auto mb-16"
@@ -141,7 +141,7 @@ export function Resources() {
                       <div className={`w-10 h-10 rounded-lg ${resource.color} flex items-center justify-center flex-shrink-0`}>
                         <Icon className="w-5 h-5" data-testid={`icon-resource-${resource.id}`} />
                       </div>
-                      <h3 className="font-serif text-xl font-semibold text-foreground group-hover:text-primary transition-colors" data-testid={`text-resource-title-${resource.id}`}>
+                      <h3 className="font-serif text-xl font-semibold text-foreground group-hover:text-chart-1 transition-colors" data-testid={`text-resource-title-${resource.id}`}>
                         {resource.title}
                       </h3>
                     </div>
@@ -169,7 +169,7 @@ export function Resources() {
             onClick={() =>
               document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' })
             }
-            className="text-primary font-medium hover:underline underline-offset-4"
+            className="text-chart-1 font-medium hover:text-chart-2 hover:underline underline-offset-4 transition-colors"
             data-testid="link-resources-contact"
           >
             Accéder à toutes les ressources →

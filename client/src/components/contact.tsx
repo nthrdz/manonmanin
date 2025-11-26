@@ -149,15 +149,15 @@ export function Contact() {
                   transition={{ duration: 0.4, delay: 0.3 + index * 0.1 }}
                   data-testid={`contact-info-${info.label.toLowerCase()}`}
                 >
-                  <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                    <info.icon className="w-6 h-6 text-primary" />
+                  <div className="w-12 h-12 rounded-full bg-chart-1/15 flex items-center justify-center flex-shrink-0 border border-chart-1/20">
+                    <info.icon className="w-6 h-6 text-chart-1" />
                   </div>
                   <div>
                     <p className="text-sm text-muted-foreground mb-1">{info.label}</p>
                     {info.href ? (
                       <a
                         href={info.href}
-                        className="text-foreground font-medium hover:text-primary transition-colors"
+                        className="text-foreground font-medium hover:text-chart-1 transition-colors"
                       >
                         {info.value}
                       </a>
@@ -169,7 +169,7 @@ export function Contact() {
               ))}
             </div>
 
-            <div className="bg-card border border-card-border rounded-lg p-6">
+            <div className="bg-chart-2/5 border border-chart-2/20 rounded-lg p-6">
               <h4 className="font-semibold text-foreground mb-3">
                 Horaires de disponibilité
               </h4>
@@ -205,7 +205,7 @@ export function Contact() {
                   animate={{ scale: 1 }}
                   transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
                 >
-                  <CheckCircle2 className="w-20 h-20 text-primary mb-6" data-testid="icon-success" />
+                  <CheckCircle2 className="w-20 h-20 text-chart-1 mb-6" data-testid="icon-success" />
                 </motion.div>
                 <h3 className="font-serif text-2xl font-semibold text-foreground mb-3" data-testid="text-success-title">
                   Message envoyé !

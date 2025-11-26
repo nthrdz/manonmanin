@@ -90,7 +90,7 @@ export function Navigation() {
                   data-testid={`link-${link.name.toLowerCase()}`}
                 >
                   {link.name}
-                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full" />
+                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-chart-1 transition-all duration-300 group-hover:w-full" />
                 </motion.button>
               ))}
             </div>
@@ -109,7 +109,7 @@ export function Navigation() {
                 data-testid="button-contact-nav"
               >
                 <span className="relative z-10">Me contacter</span>
-                <div className="absolute inset-0 bg-gradient-to-r from-primary to-accent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="absolute inset-0 bg-gradient-to-r from-chart-1 to-chart-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               </Button>
             </motion.div>
 

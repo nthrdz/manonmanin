@@ -99,7 +99,7 @@ export function Hero() {
           >
             Votre voyage post-partum
             <br />
-            <span className="text-primary">en toute sérénité</span>
+            <span className="text-chart-1">en toute sérénité</span>
           </motion.h1>
 
           <motion.p
@@ -123,7 +123,7 @@ export function Hero() {
             <Button
               size="lg"
               onClick={scrollToContact}
-              className="group relative overflow-hidden bg-primary hover:bg-primary/90 text-white px-8 py-6 text-lg"
+              className="group relative overflow-hidden bg-chart-1 hover:bg-chart-2 text-white px-8 py-6 text-lg shadow-lg shadow-chart-1/30"
               data-testid="button-hero-contact"
             >
               <span className="relative z-10 flex items-center gap-2">

@@ -124,13 +124,13 @@ export function Services() {
                 whileHover={{ y: -8 }}
                 data-testid={`card-service-${service.id}`}
               >
-                <Card className="h-full p-8 hover-elevate active-elevate-2 transition-all duration-300 group cursor-pointer border-card-border">
+                <Card className="h-full p-8 hover-elevate active-elevate-2 transition-all duration-300 group cursor-pointer border-card-border bg-card/50 hover:bg-chart-2/5">
                   <motion.div
-                    className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors"
+                    className="w-14 h-14 rounded-full bg-chart-1/15 flex items-center justify-center mb-6 group-hover:bg-chart-1/25 transition-colors border border-chart-1/20"
                     whileHover={{ scale: 1.1, rotate: 5 }}
                     transition={{ type: 'spring', stiffness: 400, damping: 10 }}
                   >
-                    <Icon className="w-7 h-7 text-primary" />
+                    <Icon className="w-7 h-7 text-chart-1" />
                   </motion.div>
 
                   <h3 className="font-serif text-xl lg:text-2xl font-semibold text-foreground mb-3" data-testid={`text-service-title-${service.id}`}>
@@ -150,7 +150,7 @@ export function Services() {
                         animate={inView ? { opacity: 1, x: 0 } : {}}
                         transition={{ duration: 0.4, delay: index * 0.1 + idx * 0.05 }}
                       >
-                        <div className="w-1.5 h-1.5 rounded-full bg-primary mt-2 flex-shrink-0" />
+                        <div className="w-1.5 h-1.5 rounded-full bg-chart-2 mt-2 flex-shrink-0" />
                         <span>{detail}</span>
                       </motion.li>
                     ))}
@@ -174,7 +174,7 @@ export function Services() {
             onClick={() =>
               document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' })
             }
-            className="text-primary font-medium hover:underline underline-offset-4"
+            className="text-chart-1 font-medium hover:text-chart-2 hover:underline underline-offset-4 transition-colors"
             data-testid="link-services-contact"
           >
             Discutons de votre situation →

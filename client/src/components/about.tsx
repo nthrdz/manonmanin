@@ -37,7 +37,7 @@ export function About() {
   });
 
   return (
-    <section id="about" className="py-20 lg:py-32 bg-card/30" ref={ref}>
+    <section id="about" className="py-20 lg:py-32 bg-chart-2/3" ref={ref}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           {/* Image Column */}
@@ -58,7 +58,7 @@ export function About() {
 
             {/* Floating Badge */}
             <motion.div
-              className="absolute -bottom-6 -right-6 bg-primary text-primary-foreground p-6 rounded-lg shadow-xl"
+              className="absolute -bottom-6 -right-6 bg-chart-1 text-white p-6 rounded-lg shadow-xl border-2 border-chart-2/30"
               initial={{ scale: 0, rotate: -10 }}
               animate={inView ? { scale: 1, rotate: 0 } : {}}
               transition={{ duration: 0.6, delay: 0.4 }}
@@ -104,13 +104,13 @@ export function About() {
                   data-testid={`milestone-${milestone.year}`}
                 >
                   <div className="flex-shrink-0">
-                    <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                      <milestone.icon className="w-6 h-6 text-primary" />
+                    <div className="w-12 h-12 rounded-full bg-chart-1/15 flex items-center justify-center border border-chart-1/20">
+                      <milestone.icon className="w-6 h-6 text-chart-1" />
                     </div>
                   </div>
                   <div className="flex-1">
                     <div className="flex items-baseline gap-3 mb-1">
-                      <span className="text-primary font-semibold">{milestone.year}</span>
+                      <span className="text-chart-1 font-semibold">{milestone.year}</span>
                       <h4 className="font-serif text-lg font-semibold text-foreground">
                         {milestone.title}
                       </h4>

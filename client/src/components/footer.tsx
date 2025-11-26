@@ -59,12 +59,12 @@ export function Footer() {
                   key={social.label}
                   href={social.href}
                   aria-label={social.label}
-                  className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center hover-elevate active-elevate-2 transition-all"
+                  className="w-10 h-10 rounded-full bg-chart-1/15 flex items-center justify-center hover-elevate active-elevate-2 transition-all border border-chart-1/20 hover:bg-chart-1/25"
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.95 }}
                   data-testid={`link-social-${social.label.toLowerCase()}`}
                 >
-                  <social.icon className="w-5 h-5 text-primary" />
+                  <social.icon className="w-5 h-5 text-chart-1" />
                 </motion.a>
               ))}
             </div>

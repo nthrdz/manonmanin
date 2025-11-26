@@ -129,15 +129,15 @@ export function Testimonials() {
                 data-testid={`testimonial-${currentIndex}`}
               >
                 <div className="bg-card border border-card-border rounded-lg p-8 sm:p-12 shadow-lg mx-4">
-                  <Quote className="w-12 h-12 text-primary/30 mb-6" />
+                  <Quote className="w-12 h-12 text-chart-1/40 mb-6" />
                   
                   <p className="text-lg sm:text-xl text-foreground leading-relaxed mb-8 min-h-[120px]">
                     {testimonials[currentIndex].texte}
                   </p>
 
                   <div className="flex items-center gap-4">
-                    <Avatar className="w-14 h-14 border-2 border-primary/20">
-                      <AvatarFallback className="bg-primary/10 text-primary font-semibold">
+                    <Avatar className="w-14 h-14 border-2 border-chart-1/30">
+                      <AvatarFallback className="bg-chart-1/15 text-chart-1 font-semibold">
                         {getInitials(testimonials[currentIndex].nom)}
                       </AvatarFallback>
                     </Avatar>
@@ -176,8 +176,8 @@ export function Testimonials() {
                   }}
                   className={`h-2 rounded-full transition-all duration-300 ${
                     index === currentIndex
-                      ? 'w-8 bg-primary'
-                      : 'w-2 bg-primary/30 hover:bg-primary/50'
+                      ? 'w-8 bg-chart-1'
+                      : 'w-2 bg-chart-1/40 hover:bg-chart-2/60'
                   }`}
                   data-testid={`button-testimonial-dot-${index}`}
                 />
