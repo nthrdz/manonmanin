@@ -12,7 +12,7 @@ export function Navigation() {
   const backgroundColor = useTransform(
     scrollY,
     [0, 100],
-    ['rgba(249, 245, 240, 0)', 'rgba(249, 245, 240, 0.95)']
+    ['rgba(252, 248, 243, 0)', 'rgba(252, 248, 243, 0.95)']
   );
 
   const backdropBlur = useTransform(
