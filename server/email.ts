@@ -274,22 +274,76 @@ export class EmailService {
     }
 
     const fromEmail = process.env.FROM_EMAIL || 'onboarding@resend.dev';
+    const contactEmail = process.env.CONTACT_EMAIL || 'contact@manonmanin-mamamia.fr';
 
     try {
       if (this.useResend && this.resend) {
-        const { error } = await this.resend.emails.send({
+        // Envoyer l'email de confirmation à l'utilisateur
+        const { error: userError } = await this.resend.emails.send({
           from: `Accompagnement Post-Partum <${fromEmail}>`,
           to: newsletter.email,
           subject: 'Bienvenue dans notre newsletter !',
           html: this.getEmailHtml('newsletter', {}),
         });
 
-        if (error) {
-          console.error('❌ Failed to send newsletter confirmation email:', error);
+        if (userError) {
+          console.error('❌ Failed to send newsletter confirmation email:', userError);
           return { success: false };
         }
 
         console.log('✅ Newsletter confirmation email sent to:', newsletter.email);
+
+        // Envoyer une notification à l'administrateur
+        const { error: adminError } = await this.resend.emails.send({
+          from: `Site Post-Partum <${fromEmail}>`,
+          to: contactEmail,
+          subject: `Nouvelle inscription à la newsletter : ${newsletter.email}`,
+          html: `
+            <div style="font-family: 'Inter', Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f5f0;">
+              <div style="background-color: white; border-radius: 12px; padding: 32px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                <h1 style="color: #D4764B; font-family: 'Cormorant Garamond', Georgia, serif; font-size: 28px; margin-bottom: 24px; border-bottom: 2px solid #D4764B; padding-bottom: 12px;">
+                  Nouvelle Inscription à la Newsletter
+                </h1>
+                
+                <div style="margin-bottom: 24px;">
+                  <h2 style="color: #5C3D2E; font-size: 18px; margin-bottom: 8px;">Informations</h2>
+                  <table style="width: 100%; border-collapse: collapse;">
+                    <tr>
+                      <td style="padding: 8px 0; color: #8B4513; font-weight: 600;">Email:</td>
+                      <td style="padding: 8px 0;"><a href="mailto:${newsletter.email}" style="color: #D4764B; text-decoration: none;">${newsletter.email}</a></td>
+                    </tr>
+                    <tr>
+                      <td style="padding: 8px 0; color: #8B4513; font-weight: 600;">Date:</td>
+                      <td style="padding: 8px 0; color: #333;">${new Date().toLocaleString('fr-FR')}</td>
+                    </tr>
+                  </table>
+                </div>
+
+                <div style="text-align: center; padding-top: 20px; border-top: 1px solid #e5e5e5;">
+                  <p style="color: #666; font-size: 14px; margin: 0;">
+                    Cette personne a été ajoutée à votre liste de newsletter.
+                  </p>
+                </div>
+              </div>
+            </div>
+          `,
+          text: `
+Nouvelle inscription à la newsletter
+
+Email: ${newsletter.email}
+Date: ${new Date().toLocaleString('fr-FR')}
+
+Cette personne a été ajoutée à votre liste de newsletter.
+          `,
+        });
+
+        if (adminError) {
+          console.error('❌ Failed to send newsletter notification to admin:', adminError);
+          // On continue quand même, l'utilisateur a reçu sa confirmation
+        } else {
+          console.log('✅ Newsletter notification sent to admin:', contactEmail);
+        }
+
         return { success: true };
       }
     } catch (error) {

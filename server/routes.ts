@@ -87,22 +87,41 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Newsletter subscription
   app.post("/api/newsletter", async (req, res) => {
+    console.log('========================================');
+    console.log('📧 NEWSLETTER SUBSCRIPTION RECEIVED');
+    console.log('========================================');
+    console.log('📧 Request body:', JSON.stringify(req.body, null, 2));
+    console.log('📧 Timestamp:', new Date().toISOString());
+    
     try {
       // Validate request body
       const validatedData = newsletterSchema.parse(req.body);
+      console.log('✅ Data validated:', validatedData.email);
 
       // Save newsletter subscription to storage
       const savedNewsletter = await storage.saveNewsletter(validatedData);
+      console.log('✅ Newsletter saved to storage:', savedNewsletter.id);
 
-      // Send confirmation email (fire and forget)
-      emailService.sendNewsletterConfirmationEmail(validatedData).catch(err => 
-        console.error('Failed to send newsletter confirmation:', err)
-      );
+      // Send confirmation email (includes notification to admin)
+      const emailResult = await emailService.sendNewsletterConfirmationEmail(validatedData);
+      
+      console.log('========================================');
+      console.log('📧 NEWSLETTER EMAIL RESULT');
+      console.log('========================================');
+      if (!emailResult.success) {
+        console.error('❌ Newsletter emails NOT sent');
+        console.error('❌ Check Resend configuration on Vercel');
+      } else {
+        console.log('✅ Newsletter confirmation sent to:', validatedData.email);
+        console.log('✅ Newsletter notification sent to admin');
+      }
+      console.log('========================================');
 
       res.json({
         success: true,
         message: "Merci de vous être inscrit à notre newsletter !",
         id: savedNewsletter.id,
+        emailSent: emailResult.success,
       });
     } catch (error) {
       if (error instanceof z.ZodError) {
