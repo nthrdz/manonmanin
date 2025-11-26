@@ -106,8 +106,8 @@ export function Contact() {
     },
     {
       icon: MapPin,
-      label: 'Localisation',
-      value: 'Nantes',
+      label: 'Département',
+      value: '44',
       href: null,
     },
   ];
@@ -173,9 +173,14 @@ export function Contact() {
               <h4 className="font-semibold text-foreground mb-3">
                 Horaires de disponibilité
               </h4>
-              <div className="space-y-2 text-sm text-muted-foreground">
+              <div className="space-y-2 text-sm text-muted-foreground mb-4">
                 <p>Lundi, Mardi, Jeudi, Vendredi: 9h00 - 16h00</p>
                 <p>Samedi: 9h00 - 12h00</p>
+              </div>
+              <div className="pt-4 border-t border-card-border">
+                <p className="text-sm font-medium text-foreground">
+                  Visioférence possible
+                </p>
               </div>
             </div>
           </motion.div>
