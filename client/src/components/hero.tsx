@@ -48,7 +48,7 @@ export function Hero() {
             fpsLimit: 120,
             particles: {
               color: {
-                value: ['#D4764B', '#CC7722', '#B8860B'],
+                value: ['#E67E22', '#D35400', '#C0392B', '#A0522D', '#D4AF37'],
               },
               move: {
                 direction: 'top',

@@ -61,45 +61,45 @@ export class EmailService {
     if (template === 'contact') {
       const { contact, typeText } = data;
       return `
-        <div style="font-family: 'Inter', Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f5f0;">
+        <div style="font-family: 'Nunito', Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f5f0;">
           <div style="background-color: white; border-radius: 12px; padding: 32px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-            <h1 style="color: #D4764B; font-family: 'Cormorant Garamond', Georgia, serif; font-size: 28px; margin-bottom: 24px; border-bottom: 2px solid #D4764B; padding-bottom: 12px;">
+            <h1 style="color: #E67E22; font-family: 'Playfair Display', Georgia, serif; font-size: 28px; margin-bottom: 24px; border-bottom: 2px solid #E67E22; padding-bottom: 12px;">
               Nouveau Message de Contact
             </h1>
             
             <div style="margin-bottom: 24px;">
-              <h2 style="color: #5C3D2E; font-size: 18px; margin-bottom: 8px;">Informations</h2>
+              <h2 style="color: #8B4513; font-size: 18px; margin-bottom: 8px;">Informations</h2>
               <table style="width: 100%; border-collapse: collapse;">
                 <tr>
-                  <td style="padding: 8px 0; color: #8B4513; font-weight: 600;">Nom:</td>
+                  <td style="padding: 8px 0; color: #A0522D; font-weight: 600;">Nom:</td>
                   <td style="padding: 8px 0; color: #333;">${contact.nom}</td>
                 </tr>
                 <tr>
-                  <td style="padding: 8px 0; color: #8B4513; font-weight: 600;">Email:</td>
-                  <td style="padding: 8px 0;"><a href="mailto:${contact.email}" style="color: #D4764B; text-decoration: none;">${contact.email}</a></td>
+                  <td style="padding: 8px 0; color: #A0522D; font-weight: 600;">Email:</td>
+                  <td style="padding: 8px 0;"><a href="mailto:${contact.email}" style="color: #E67E22; text-decoration: none;">${contact.email}</a></td>
                 </tr>
                 ${contact.telephone ? `
                 <tr>
-                  <td style="padding: 8px 0; color: #8B4513; font-weight: 600;">Téléphone:</td>
+                  <td style="padding: 8px 0; color: #A0522D; font-weight: 600;">Téléphone:</td>
                   <td style="padding: 8px 0; color: #333;">${contact.telephone}</td>
                 </tr>
                 ` : ''}
                 <tr>
-                  <td style="padding: 8px 0; color: #8B4513; font-weight: 600;">Type:</td>
+                  <td style="padding: 8px 0; color: #A0522D; font-weight: 600;">Type:</td>
                   <td style="padding: 8px 0; color: #333;">${typeText}</td>
                 </tr>
               </table>
             </div>
 
             <div style="margin-bottom: 24px;">
-              <h2 style="color: #5C3D2E; font-size: 18px; margin-bottom: 12px;">Message</h2>
-              <div style="background-color: #f9f5f0; padding: 16px; border-radius: 8px; border-left: 4px solid #D4764B;">
+              <h2 style="color: #8B4513; font-size: 18px; margin-bottom: 12px;">Message</h2>
+              <div style="background-color: #f9f5f0; padding: 16px; border-radius: 8px; border-left: 4px solid #E67E22;">
                 <p style="color: #333; line-height: 1.6; margin: 0; white-space: pre-wrap;">${contact.message}</p>
               </div>
             </div>
 
             <div style="text-align: center; padding-top: 20px; border-top: 1px solid #e5e5e5;">
-              <a href="mailto:${contact.email}" style="display: inline-block; background-color: #D4764B; color: white; padding: 12px 32px; border-radius: 6px; text-decoration: none; font-weight: 600;">
+              <a href="mailto:${contact.email}" style="display: inline-block; background-color: #E67E22; color: white; padding: 12px 32px; border-radius: 6px; text-decoration: none; font-weight: 600;">
                 Répondre à ${contact.nom}
               </a>
             </div>
@@ -111,9 +111,9 @@ export class EmailService {
     if (template === 'confirmation') {
       const { contact } = data;
       return `
-        <div style="font-family: 'Inter', Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f5f0;">
+        <div style="font-family: 'Nunito', Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f5f0;">
           <div style="background-color: white; border-radius: 12px; padding: 32px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-            <h1 style="color: #D4764B; font-family: 'Cormorant Garamond', Georgia, serif; font-size: 28px; margin-bottom: 16px;">
+            <h1 style="color: #E67E22; font-family: 'Playfair Display', Georgia, serif; font-size: 28px; margin-bottom: 16px;">
               Merci pour votre message !
             </h1>
             
@@ -130,8 +130,8 @@ export class EmailService {
             </p>
             
             <div style="text-align: center; margin: 32px 0;">
-              <div style="display: inline-block; background-color: #f9f5f0; padding: 20px; border-radius: 8px; border: 2px solid #D4764B;">
-                <p style="color: #8B4513; font-weight: 600; margin: 0;">
+              <div style="display: inline-block; background-color: #f9f5f0; padding: 20px; border-radius: 8px; border: 2px solid #E67E22;">
+                <p style="color: #A0522D; font-weight: 600; margin: 0;">
                   💛 Prenez soin de vous 💛
                 </p>
               </div>
@@ -148,9 +148,9 @@ export class EmailService {
 
     if (template === 'newsletter') {
       return `
-        <div style="font-family: 'Inter', Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f5f0;">
+        <div style="font-family: 'Nunito', Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f5f0;">
           <div style="background-color: white; border-radius: 12px; padding: 32px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-            <h1 style="color: #D4764B; font-family: 'Cormorant Garamond', Georgia, serif; font-size: 28px; margin-bottom: 16px;">
+            <h1 style="color: #E67E22; font-family: 'Playfair Display', Georgia, serif; font-size: 28px; margin-bottom: 16px;">
               Bienvenue ! ✨
             </h1>
             
@@ -163,8 +163,8 @@ export class EmailService {
             </p>
             
             <div style="text-align: center; margin: 32px 0;">
-              <div style="display: inline-block; background-color: #f9f5f0; padding: 20px; border-radius: 8px; border: 2px solid #D4764B;">
-                <p style="color: #8B4513; font-weight: 600; margin: 0;">
+              <div style="display: inline-block; background-color: #f9f5f0; padding: 20px; border-radius: 8px; border: 2px solid #E67E22;">
+                <p style="color: #A0522D; font-weight: 600; margin: 0;">
                   💛 Prenez soin de vous 💛
                 </p>
               </div>
@@ -299,21 +299,21 @@ export class EmailService {
           to: contactEmail,
           subject: `Nouvelle inscription à la newsletter : ${newsletter.email}`,
           html: `
-            <div style="font-family: 'Inter', Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f5f0;">
+            <div style="font-family: 'Nunito', Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f5f0;">
               <div style="background-color: white; border-radius: 12px; padding: 32px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                <h1 style="color: #D4764B; font-family: 'Cormorant Garamond', Georgia, serif; font-size: 28px; margin-bottom: 24px; border-bottom: 2px solid #D4764B; padding-bottom: 12px;">
+                <h1 style="color: #E67E22; font-family: 'Playfair Display', Georgia, serif; font-size: 28px; margin-bottom: 24px; border-bottom: 2px solid #E67E22; padding-bottom: 12px;">
                   Nouvelle Inscription à la Newsletter
                 </h1>
                 
                 <div style="margin-bottom: 24px;">
-                  <h2 style="color: #5C3D2E; font-size: 18px; margin-bottom: 8px;">Informations</h2>
+                  <h2 style="color: #8B4513; font-size: 18px; margin-bottom: 8px;">Informations</h2>
                   <table style="width: 100%; border-collapse: collapse;">
                     <tr>
-                      <td style="padding: 8px 0; color: #8B4513; font-weight: 600;">Email:</td>
-                      <td style="padding: 8px 0;"><a href="mailto:${newsletter.email}" style="color: #D4764B; text-decoration: none;">${newsletter.email}</a></td>
+                      <td style="padding: 8px 0; color: #A0522D; font-weight: 600;">Email:</td>
+                      <td style="padding: 8px 0;"><a href="mailto:${newsletter.email}" style="color: #E67E22; text-decoration: none;">${newsletter.email}</a></td>
                     </tr>
                     <tr>
-                      <td style="padding: 8px 0; color: #8B4513; font-weight: 600;">Date:</td>
+                      <td style="padding: 8px 0; color: #A0522D; font-weight: 600;">Date:</td>
                       <td style="padding: 8px 0; color: #333;">${new Date().toLocaleString('fr-FR')}</td>
                     </tr>
                   </table>
