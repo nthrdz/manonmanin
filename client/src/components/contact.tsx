@@ -176,7 +176,6 @@ export function Contact() {
               <div className="space-y-2 text-sm text-muted-foreground">
                 <p>Lundi, Mardi, Jeudi, Vendredi: 9h00 - 16h00</p>
                 <p>Samedi: 9h00 - 12h00</p>
-                <p>Dimanche: Sur rendez-vous uniquement</p>
               </div>
             </div>
           </motion.div>
