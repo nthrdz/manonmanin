@@ -70,7 +70,7 @@ export function Navigation() {
               <img 
                 src={logoImage} 
                 alt="Logo Manon" 
-                className="h-14 lg:h-18 w-auto object-contain transition-transform group-hover:scale-105"
+                className="h-14 lg:h-[72px] w-auto object-contain transition-transform group-hover:scale-105"
               />
               <span className="font-serif text-lg lg:text-xl font-semibold text-foreground leading-tight">
                 Manon Mamamia
