@@ -12,7 +12,7 @@ export function Navigation() {
   const backgroundColor = useTransform(
     scrollY,
     [0, 100],
-    ['rgba(252, 248, 243, 0)', 'rgba(252, 248, 243, 0.95)']
+    ['rgba(252, 248, 243, 0.95)', 'rgba(252, 248, 243, 0.98)']
   );
 
   const backdropBlur = useTransform(
@@ -54,7 +54,7 @@ export function Navigation() {
     >
       <div
         className={`border-b transition-colors duration-300 ${
-          isScrolled ? 'border-border' : 'border-transparent'
+          isScrolled ? 'border-border' : 'border-border/30'
         }`}
       >
         <nav className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -83,7 +83,7 @@ export function Navigation() {
                 <motion.button
                   key={link.name}
                   onClick={() => scrollToSection(link.href)}
-                  className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors relative group"
+                  className="text-sm font-medium text-foreground hover:text-chart-1 transition-colors relative group"
                   initial={{ opacity: 0, y: -20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 + 0.3 }}
