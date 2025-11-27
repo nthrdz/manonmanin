@@ -30,10 +30,10 @@ export function Navigation() {
 
   const navLinks = [
     { name: 'Accueil', href: '#hero' },
-    { name: 'Services', href: '#services' },
+    { name: 'Ressources', href: '#resources' },
     { name: 'À propos', href: '#about' },
     { name: 'Témoignages', href: '#testimonials' },
-    { name: 'Ressources', href: '#resources' },
+    { name: 'Services', href: '#services' },
   ];
 
   const scrollToSection = (href: string) => {
