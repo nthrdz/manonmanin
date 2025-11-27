@@ -65,9 +65,9 @@ export function About() {
               data-testid="badge-experience-years"
             >
               <div className="text-center">
-                <div className="text-3xl font-bold" data-testid="text-years-count">6+</div>
+                <div className="text-3xl font-bold" data-testid="text-years-count">8+</div>
                 <div className="text-sm font-medium">Années</div>
-                <div className="text-xs opacity-90">d\'expérience</div>
+                <div className="text-xs opacity-90">d'expérience</div>
               </div>
             </motion.div>
           </motion.div>
@@ -82,12 +82,30 @@ export function About() {
               <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-semibold text-foreground mb-6">
                 À Propos de Moi
               </h2>
-              <div className="space-y-4 text-muted-foreground leading-relaxed mb-8">
-                <p>
-                  Je suis maman d'un merveilleux petit Gabriel, né en mars 2023. Psychomotricienne de formation depuis 2014, j'ai travaillé dans divers contextes : auprès d'adultes cérébrolésés, en maison de retraite, et en pédopsychiatrie.
+              <div className="space-y-5 text-muted-foreground leading-relaxed mb-8">
+                <p className="text-lg font-medium text-foreground">
+                  Accompagnante en périnatalité et facilitatrice de moments uniques pour les futures et jeunes mamans, j'allie science, tradition et humanité pour te soutenir dans cette aventure transformatrice qu'est la maternité.
                 </p>
+                
                 <p>
-                  Après avoir frôlé deux épisodes de burn-out et vécu un grave accident qui a marqué un tournant dans ma vie, j'ai décidé de me réorienter. Ce choix a ouvert la voie à des formations en coaching, naturopathie, gynécologie holistique et en tant que doula.
+                  Avec un Diplôme d'État de psychomotricité et 8 années d'expérience auprès de différents publics, j'ai affiné une approche globale qui prend soin de ton corps, de tes émotions et de ton esprit. Formée comme naturopathe, coach, doula, accompagnante périnatale, éducatrice menstruelle, facilitatrice de cercles et de Mama Blessings, je t'accompagne avec des outils qui mêlent rituels, pratiques psycho-corporelles, transmissions de savoirs et une écoute bienveillante. Au-delà de toutes ces étiquettes, je me considère avant tout comme une chouchouteuse de mamans, qui prend soin et soutient les femmes que j'accompagne, à tous les niveaux.
+                </p>
+
+                <p>
+                  Au-delà de ma formation, mon expérience personnelle de maman me permet de comprendre profondément tes joies, tes peurs et tes besoins.
+                </p>
+
+                <div className="pt-4">
+                  <h3 className="font-serif text-xl font-semibold text-foreground mb-3">
+                    Mon objectif ?
+                  </h3>
+                  <p>
+                    T'aider à te reconnecter à ta puissance intérieure, à créer ton village de soutien et à vivre une maternité empreinte de douceur, de sacré, de sérénité et de souveraineté.
+                  </p>
+                </div>
+
+                <p className="text-foreground font-medium">
+                  Avec moi, tu n'es jamais seule. Tu es au cœur de ton histoire, et je suis là pour t'aider à en faire une expérience unique et inoubliable.
                 </p>
               </div>
             </motion.div>
