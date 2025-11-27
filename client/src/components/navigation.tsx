@@ -61,18 +61,18 @@ export function Navigation() {
           <div className="flex items-center justify-between h-16 lg:h-20">
             {/* Logo */}
             <motion.div
-              className="flex items-center gap-3 cursor-pointer"
+              className="flex items-center gap-2 cursor-pointer group"
               onClick={() => scrollToSection('#hero')}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
               data-testid="link-logo"
             >
               <img 
                 src={logoImage} 
                 alt="Logo Manon" 
-                className="h-16 lg:h-20 w-auto object-contain"
+                className="h-14 lg:h-18 w-auto object-contain transition-transform group-hover:scale-105"
               />
-              <span className="font-serif text-xl lg:text-2xl font-semibold text-foreground">
+              <span className="font-serif text-lg lg:text-xl font-semibold text-foreground leading-tight">
                 Manon Mamamia
               </span>
             </motion.div>
