@@ -50,8 +50,7 @@ export function Footer() {
               />
             </div>
             <p className="text-sm text-muted-foreground leading-relaxed mb-6">
-              Accompagnement professionnel et bienveillant pour les mamans.
-              Un soutien personnalisé dans votre cheminement après la naissance.
+              Accompagnement périnatal holistique et initiatique où tu peux être chouchoutée, soutenue et entourée à chaque étape de ta maternité.
             </p>
             <div className="flex gap-3">
               {socialLinks.map((social) => (
