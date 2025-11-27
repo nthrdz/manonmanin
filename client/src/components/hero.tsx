@@ -109,9 +109,7 @@ export function Hero() {
             transition={{ duration: 0.8, delay: 0.6 }}
             data-testid="text-hero-subtitle"
           >
-            Un accompagnement professionnel et chaleureux pour vous soutenir
-            dans cette période si précieuse. Retrouvez votre équilibre, 
-            connectez-vous à votre force intérieure.
+            Ton voyage initiatique et holistique entre terre et mère. Je t'accompagne à chaque étape de ta maternité de façon globale pour une transformation profonde.
           </motion.p>
 
           <motion.div
