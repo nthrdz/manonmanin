@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Calendar, MapPin, Users, Heart, Sparkles } from 'lucide-react';
+import { Calendar, MapPin, Sparkles } from 'lucide-react';
 
 export function Actualites() {
   const [ref, inView] = useInView({
@@ -45,14 +45,9 @@ export function Actualites() {
             transition={{ duration: 0.6, delay: 0.2 }}
           >
             <Card className="h-full p-8 border-card-border bg-card/50 hover:bg-card/80 transition-colors">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-12 h-12 rounded-full bg-chart-1/15 flex items-center justify-center border border-chart-1/20">
-                  <Users className="w-6 h-6 text-chart-1" />
-                </div>
-                <h3 className="font-serif text-2xl font-semibold text-foreground">
-                  Les ateliers Walk'n cause
-                </h3>
-              </div>
+              <h3 className="font-serif text-2xl font-semibold text-foreground mb-6">
+                Les ateliers Walk'n cause
+              </h3>
 
               <p className="text-muted-foreground mb-6 leading-relaxed">
                 Les ateliers en nature reviennent à la rentrée ! Que tu sois enceinte ou en post-partum, avec ou sans ton bébé, tu es la bienvenue.
@@ -118,14 +113,9 @@ export function Actualites() {
             transition={{ duration: 0.6, delay: 0.4 }}
           >
             <Card className="h-full p-8 border-card-border bg-card/50 hover:bg-card/80 transition-colors">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-12 h-12 rounded-full bg-chart-5/15 flex items-center justify-center border border-chart-5/20">
-                  <Heart className="w-6 h-6 text-chart-5" />
-                </div>
-                <h3 className="font-serif text-2xl font-semibold text-foreground">
-                  Nouvelle formule d'accompagnement
-                </h3>
-              </div>
+              <h3 className="font-serif text-2xl font-semibold text-foreground mb-6">
+                Nouvelle formule d'accompagnement
+              </h3>
 
               <div className="mb-6">
                 <span className="inline-block px-4 py-1 bg-chart-5/15 text-chart-5 rounded-full text-sm font-medium border border-chart-5/20">
