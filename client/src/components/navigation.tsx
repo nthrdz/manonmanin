@@ -73,12 +73,12 @@ export function Navigation() {
                   alt="Logo Manon" 
                   className="h-12 lg:h-16 w-auto object-contain transition-transform group-hover:scale-105"
                 />
-                <div className="flex flex-col -ml-1">
-                  <span className="font-serif text-xl lg:text-2xl font-bold text-foreground tracking-wide">
+                <div className="flex flex-col ml-1">
+                  <span className="font-serif text-xl lg:text-2xl font-semibold text-foreground tracking-wide italic">
                     Manon
                   </span>
-                  <span className="font-serif text-[10px] lg:text-xs text-chart-1 tracking-[0.2em] font-medium -mt-0.5">
-                    mamamia
+                  <span className="font-sans text-[9px] lg:text-[11px] text-chart-1 tracking-[0.18em] font-medium uppercase -mt-0.5">
+                    Mamamia
                   </span>
                 </div>
               </div>
