@@ -61,20 +61,27 @@ export function Navigation() {
           <div className="flex items-center justify-between h-16 lg:h-20">
             {/* Logo */}
             <motion.div
-              className="flex items-center gap-2 cursor-pointer group"
+              className="flex items-center cursor-pointer group"
               onClick={() => scrollToSection('#hero')}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               data-testid="link-logo"
             >
-              <img 
-                src={logoImage} 
-                alt="Logo Manon" 
-                className="h-14 lg:h-[72px] w-auto object-contain transition-transform group-hover:scale-105"
-              />
-              <span className="font-serif text-lg lg:text-xl font-semibold text-foreground leading-tight">
-                Manon Mamamia
-              </span>
+              <div className="relative flex items-center">
+                <img 
+                  src={logoImage} 
+                  alt="Logo Manon" 
+                  className="h-12 lg:h-16 w-auto object-contain transition-transform group-hover:scale-105"
+                />
+                <div className="flex flex-col -ml-1">
+                  <span className="font-serif text-xl lg:text-2xl font-semibold text-foreground tracking-wide" style={{ fontVariant: 'small-caps' }}>
+                    Manon
+                  </span>
+                  <span className="font-serif text-[10px] lg:text-xs text-chart-1 tracking-[0.25em] uppercase -mt-1">
+                    Mamamia
+                  </span>
+                </div>
+              </div>
             </motion.div>
 
             {/* Desktop Navigation */}
