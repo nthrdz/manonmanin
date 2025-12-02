@@ -103,7 +103,6 @@ export function Resources() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
           {resources.map((resource, index) => {
-            const Icon = resource.icon;
             const handleClick = () => {
               if (resource.link) {
                 window.open(resource.link, '_blank', 'noopener,noreferrer');
@@ -137,14 +136,9 @@ export function Resources() {
                   </div>
 
                   <div className="p-6">
-                    <div className="flex items-start gap-3 mb-3">
-                      <div className={`w-10 h-10 rounded-lg ${resource.color} flex items-center justify-center flex-shrink-0`}>
-                        <Icon className="w-5 h-5" data-testid={`icon-resource-${resource.id}`} />
-                      </div>
-                      <h3 className="font-serif text-xl font-semibold text-foreground group-hover:text-chart-1 transition-colors" data-testid={`text-resource-title-${resource.id}`}>
-                        {resource.title}
-                      </h3>
-                    </div>
+                    <h3 className="font-serif text-xl font-semibold text-foreground group-hover:text-chart-1 transition-colors mb-3" data-testid={`text-resource-title-${resource.id}`}>
+                      {resource.title}
+                    </h3>
 
                     <p className="text-sm text-muted-foreground leading-relaxed" data-testid={`text-resource-description-${resource.id}`}>
                       {resource.description}
