@@ -68,10 +68,10 @@ const resources = [
   },
   {
     id: '6',
-    title: 'Récupération Physique',
+    title: 'Accompagnement calendule',
     category: 'Vidéo',
     type: 'VIDEO',
-    description: 'Programme d\'exercices doux et progressifs pour retrouver votre corps en toute bienveillance',
+    description: 'Un accompagnement global sur-mesure pour les femmes et les couples, du désir d\'enfant au post-partum, alliant science sacré soutien et connexion à soi',
     image: image7,
     icon: Video,
     color: 'bg-chart-3/10 text-chart-3',
