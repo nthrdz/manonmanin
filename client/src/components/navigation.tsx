@@ -74,11 +74,11 @@ export function Navigation() {
                   className="h-12 lg:h-16 w-auto object-contain transition-transform group-hover:scale-105"
                 />
                 <div className="flex flex-col -ml-1">
-                  <span className="font-serif text-xl lg:text-2xl font-semibold text-foreground tracking-wide" style={{ fontVariant: 'small-caps' }}>
+                  <span className="font-serif text-xl lg:text-2xl font-bold text-foreground tracking-wide">
                     Manon
                   </span>
-                  <span className="font-serif text-[10px] lg:text-xs text-chart-1 tracking-[0.25em] uppercase -mt-1">
-                    Mamamia
+                  <span className="font-serif text-[10px] lg:text-xs text-chart-1 tracking-[0.2em] font-medium -mt-0.5">
+                    mamamia
                   </span>
                 </div>
               </div>
