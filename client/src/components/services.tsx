@@ -1,7 +1,6 @@
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { Card } from '@/components/ui/card';
-import { Heart, Users, BookOpen, Sparkles, Baby, Home } from 'lucide-react';
 import type { Service } from '@shared/schema';
 
 const services: Service[] = [
@@ -79,15 +78,6 @@ const services: Service[] = [
   },
 ];
 
-const iconMap = {
-  heart: Heart,
-  sparkles: Sparkles,
-  users: Users,
-  book: BookOpen,
-  baby: Baby,
-  home: Home,
-};
-
 export function Services() {
   const [ref, inView] = useInView({
     triggerOnce: true,
@@ -114,7 +104,6 @@ export function Services() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
           {services.map((service, index) => {
-            const Icon = iconMap[service.icone as keyof typeof iconMap];
             return (
               <motion.div
                 key={service.id}
@@ -125,14 +114,6 @@ export function Services() {
                 data-testid={`card-service-${service.id}`}
               >
                 <Card className="h-full p-8 hover-elevate active-elevate-2 transition-all duration-300 group cursor-pointer border-card-border bg-card/50 hover:bg-chart-2/5">
-                  <motion.div
-                    className="w-14 h-14 rounded-full bg-chart-1/15 flex items-center justify-center mb-6 group-hover:bg-chart-1/25 transition-colors border border-chart-1/20"
-                    whileHover={{ scale: 1.1, rotate: 5 }}
-                    transition={{ type: 'spring', stiffness: 400, damping: 10 }}
-                  >
-                    <Icon className="w-7 h-7 text-chart-1" />
-                  </motion.div>
-
                   <h3 className="font-serif text-xl lg:text-2xl font-semibold text-foreground mb-3" data-testid={`text-service-title-${service.id}`}>
                     {service.titre}
                   </h3>
