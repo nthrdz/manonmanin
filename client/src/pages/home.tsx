@@ -1,6 +1,7 @@
 import { ParallaxProvider } from 'react-scroll-parallax';
 import { Navigation } from '@/components/navigation';
 import { Hero } from '@/components/hero';
+import { Actualites } from '@/components/actualites';
 import { Services } from '@/components/services';
 import { About } from '@/components/about';
 import { Testimonials } from '@/components/testimonials';
@@ -14,9 +15,9 @@ export default function Home() {
       <div className="min-h-screen bg-background">
         <Navigation />
         <Hero />
+        <Actualites />
         <Resources />
         <About />
-        <Testimonials />
         <Services />
         <Contact />
         <Footer />

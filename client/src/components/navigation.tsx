@@ -30,9 +30,9 @@ export function Navigation() {
 
   const navLinks = [
     { name: 'Accueil', href: '#hero' },
+    { name: 'Actualités', href: '#actualites' },
     { name: 'Ressources', href: '#resources' },
     { name: 'À propos', href: '#about' },
-    { name: 'Témoignages', href: '#testimonials' },
     { name: 'Services', href: '#services' },
   ];
 
