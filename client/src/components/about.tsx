@@ -24,8 +24,8 @@ const milestones = [
   },
   {
     year: '2024',
-    title: '100+ Familles',
-    description: 'Plus de 100 familles accompagnées avec amour',
+    title: 'Plusieurs familles',
+    description: 'Plusieurs familles déjà accompagnées',
     icon: Sparkles,
   },
 ];
